@@ -8,12 +8,10 @@ module.exports = {
       './safelist.txt'
     ],
   },
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
-      colors: {
-        
-      }
+      colors: {}
     },
   },
   variants: {

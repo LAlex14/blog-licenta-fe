@@ -1,7 +1,7 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import { API_URL } from "@/modules/common/config";
-import { notifications, NotificationType, notify } from "@/components/common/NotificationPlugin";
-import { isForbidden, isInternalServerError, isUnauthorized, mapErrors } from "@/modules/common/utils/requestUtils";
+import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios'
+import {API_URL} from "@/modules/common/config";
+import {notifications, NotificationType, notify} from "@/components/common/NotificationPlugin";
+import {isForbidden, isInternalServerError, isUnauthorized, mapErrors} from "@/modules/common/utils/requestUtils";
 
 export const statusCodesToHandle = [400, 401, 422];
 const TOKEN_KEY = 'token'
@@ -30,6 +30,7 @@ export function successInterceptor(response: AxiosResponse): AxiosResponse {
   return response.data;
 }
 
+// @ts-ignore
 interface CustomAxiosError extends AxiosError {
   handled: boolean,
   errors: any,
@@ -42,7 +43,7 @@ export async function errorInterceptor(error: CustomAxiosError) {
     return Promise.reject(error);
   }
 
-  const { status } = error.response;
+  const {status} = error.response;
   let errors = '';
 
 

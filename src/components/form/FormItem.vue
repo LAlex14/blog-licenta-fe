@@ -1,17 +1,19 @@
 <template>
   <div
-    class="my-6"
+    class="my-3"
     :class="[{
       'has-error': errorMessage,
+      'flex items-center leading-3': $attrs.type === 'checkbox'
     }, otherClasses]"
   >
-    <label v-if="label || $slots.label"
-           :for="String($attrs.id)"
-           class="block text-sm font-medium text-gray-700"
+    <label
+      class="block text-sm font-medium text-gray-700"
+      v-if="(label || $slots.label) && $attrs.type !== 'checkbox'"
+      :for="String($attrs.id)"
     >
       <slot name="label">
         {{ label }}
-        <span v-if="required" class="text-gray-500">
+        <span class="text-gray-500" v-if="isRequiredField">
           *
         </span>
       </slot>
@@ -20,23 +22,37 @@
     <div class="relative rounded-md">
       <FormItemError
         :error="errorMessage"
+        :rules="rules"
         :show-tooltip="inlineErrors"
       >
         <slot
-          :handleChange="handleChange"
-          :handleBlur="handleBlur"
-          :inputValue="inputValue"
           :errorMessage="errorMessage"
+          :handleBlur="handleBlur"
+          :handleChange="handleChange"
+          :inputValue="inputValue"
         />
 
       </FormItemError>
     </div>
+
+    <label
+      class="ml-2 block text-sm font-medium text-gray-900"
+      v-if="(label || $slots.label) && $attrs.type === 'checkbox'"
+      :for="String($attrs.id)"
+    >
+      <slot name="label">
+        {{ label }}
+        <span class="text-gray-500" v-if="isRequiredField">
+          *
+        </span>
+      </slot>
+    </label>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, provide } from "vue";
-import { useField } from "vee-validate";
-import { XCircleIcon, InfoIcon } from '@zhuowenli/vue-feather-icons'
+import {defineComponent, provide} from "vue";
+import {useField} from "vee-validate";
+import {InfoIcon, XCircleIcon} from '@zhuowenli/vue-feather-icons'
 import FormItemError from "@/components/form/FormItemError.vue";
 
 export default defineComponent({
@@ -134,7 +150,12 @@ export default defineComponent({
         return this.$attrs.class
       }
       return ''
-    }
+    },
+    isRequiredField() {
+      const hasRequiredAttr = this.$attrs?.required || false;
+      const hasRequiredRule = typeof this.rules === 'object' ? this.rules?.required : this.rules?.includes('required');
+      return hasRequiredRule || hasRequiredAttr;
+    },
   },
   watch: {
     modelValue(val, oldVal) {

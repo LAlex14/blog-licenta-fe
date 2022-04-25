@@ -80,7 +80,7 @@ export default defineComponent({
 })
 </script>
 <route lang="yaml">
-name: Login
+name: Register
 </route>
 <style>
 </style>
