@@ -1,13 +1,10 @@
 module.exports = {
   mode: 'jit',
-  purge: {
-    enable: true,
-    content: [
-      './index.html',
-      './src/**/*.{vue,js,ts,jsx,tsx}',
-      './safelist.txt'
-    ],
-  },
+  content: [
+    './index.html',
+    './src/**/*.{vue,js,ts,jsx,tsx}',
+    './safelist.txt'
+  ],
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
@@ -19,5 +16,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
   ],
 }

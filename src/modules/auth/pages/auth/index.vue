@@ -2,29 +2,13 @@
   <div class="mx-auto w-full max-w-sm lg:w-96">
     <div>
       <img class="h-12 w-auto" alt="Workflow" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"/>
-      <h2 class="mt-6 text-3xl font-extrabold text-gray-900">{{ $t('Create your account') }}</h2>
+      <h2 class="mt-6 text-3xl font-extrabold text-gray-900">{{ $t('Sign in to your account') }}</h2>
     </div>
 
     <div class="mt-8">
       <BaseForm
         v-slot="{ meta }"
         @submit="onSubmit">
-
-        <BaseInput
-          v-model="model.first_name"
-          :label="$t('First Name')"
-          :placeholder="$t('John')"
-          name="first_name"
-          rules="required"
-        />
-
-        <BaseInput
-          v-model="model.last_name"
-          :label="$t('Last Name')"
-          :placeholder="$t('Kennedy')"
-          name="last_name"
-          rules="required"
-        />
 
         <BaseInput
           v-model="model.email"
@@ -43,27 +27,27 @@
           type="password"
         />
 
-        <BaseInput
-          v-model="model.password_confirmation"
-          :label="$t('Confirm Password')"
-          :placeholder="$t('Password')"
-          name="password_confirmation"
-          rules="required|confirmed:@password"
-          type="password"
-        />
+        <div class="flex items-center justify-between">
+          <BaseInput
+            class="my-0 hover:cursor-pointer"
+            v-model="model.remember_me"
+            :label="$t('Remember me')"
+            name="remember_me"
+            type="checkbox"
+          />
 
-        <BaseInput
-          class="my-0 hover:cursor-pointer"
-          v-model="model.terms"
-          :label="$t('I accept the Terms of Service and Privacy Policy')"
-          name="terms"
-          type="checkbox"
-        />
+          <router-link
+            class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+            to="/auth/forgot-password"
+          >
+            {{ $t('Forgot your password?') }}
+          </router-link>
+        </div>
 
         <BaseButton
-          class="mt-5 mb-8"
+          class="my-8"
           :disabled="!meta.valid"
-          :label="$t('Sign Up')"
+          :label="$t('Sign In')"
           block
           type="submit"
           variant="primary"
@@ -72,10 +56,10 @@
 
       <div class="flex items-center justify-end">
         <router-link
-          class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-          to="/auth"
+          class="text-sm block font-medium text-indigo-600 hover:text-indigo-500"
+          to="/auth/register"
         >
-          {{ $t('Already have an Account? Sign in') }}
+          {{ $t("Don't have an account? Register") }}
         </router-link>
       </div>
     </div>
@@ -104,7 +88,7 @@ export default defineComponent({
 </script>
 <route>
 {
-name: 'Register'
+name: 'Login'
 }
 </route>
 <style>

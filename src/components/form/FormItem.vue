@@ -36,9 +36,10 @@
     </div>
 
     <label
-      class="ml-2 block text-sm font-medium text-gray-900"
+      class="ml-2 block text-sm font-medium text-gray-900 hover:cursor-pointer"
       v-if="(label || $slots.label) && $attrs.type === 'checkbox'"
       :for="String($attrs.id)"
+      @click="$emit('click-checkbox')"
     >
       <slot name="label">
         {{ label }}
@@ -72,7 +73,7 @@ export default defineComponent({
       default: '',
     },
     modelValue: {
-      type: [String, Number],
+      type: [String, Number, Boolean],
       default: '',
     },
     label: {

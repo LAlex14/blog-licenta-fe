@@ -1,6 +1,9 @@
 <template>
 
-  <FormItem v-bind="allAttributes">
+  <FormItem
+    v-bind="allAttributes"
+    @click-checkbox="$refs.input.click()"
+  >
     <!--Pass through all slots to FormItem-->
     <template v-for="(_, name) in $slots" v-slot:[name]="slotData">
       <slot :name="name" v-bind="slotData"/>
@@ -53,7 +56,7 @@ export default defineComponent({
       default: '',
     },
     modelValue: {
-      type: [String, Number],
+      type: [String, Number, Boolean],
       default: '',
     },
     type: {
