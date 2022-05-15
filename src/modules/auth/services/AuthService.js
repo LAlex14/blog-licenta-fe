@@ -13,10 +13,8 @@ export default {
   },
 
   async login(loginData) {
-    // const endpoint = loginData.token ? '/verify' : '/login'
-    const {data} = await axios.post('/login', loginData);
-    const {plainTextToken} = data?.token;
-    this.setToken(plainTextToken);
+    const endpoint = loginData.token ? '/verify' : '/login'
+    const {data} = await axios.post(endpoint, loginData);
     return data;
   },
 
@@ -30,7 +28,7 @@ export default {
   },
 
   async register(data) {
-    return await axios.post('/register', data);
+    return await axios.post('/restify/register', data);
   },
 
   async resetData() {
@@ -56,6 +54,6 @@ export default {
   },
 
   async forgotPassword(data) {
-    return axios.post('/forgot-password', data);
+    return axios.post('restify/forgot-password', data);
   },
 }

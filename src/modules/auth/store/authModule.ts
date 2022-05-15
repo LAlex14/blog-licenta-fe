@@ -2,6 +2,7 @@ import AuthService from "@/modules/auth/services/AuthService.js";
 import {error} from '@/components/common/NotificationPlugin';
 import {ActionTree, GetterTree, Module, MutationTree} from "vuex";
 import {RootState} from "@/store";
+import router from "@/router/router";
 
 export type State = {
   isLoggedIn: boolean;
@@ -23,16 +24,15 @@ const mutations: MutationTree<State> = {
 };
 
 const actions: ActionTree<State, RootState> = {
-  async login({commit, dispatch}, data) {
+  async login({commit, dispatch}, loginData) {
     try {
-      const {user} = await AuthService.login(data);
+      const {user, token} = await AuthService.login(loginData);
+      const {plainTextToken} = token;
       commit('setLoggedIn', true);
       commit('setUser', user);
+      AuthService.setToken(plainTextToken);
+      await router.push('/');
     } catch (err) {
-      if (err.handled) {
-        return
-      }
-      error('An error occurred during login. Please try again or contact us')
       console.warn(err)
     }
   },

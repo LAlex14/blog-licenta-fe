@@ -1,20 +1,20 @@
 <template>
   <div class="mx-auto w-full max-w-sm lg:w-96">
     <div>
-      <img class="h-12 w-auto" alt="Workflow" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"/>
+      <img alt="Workflow" class="h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"/>
       <h2 class="mt-6 text-3xl font-extrabold text-gray-900">{{ $t('Create your account') }}</h2>
     </div>
 
     <div class="mt-8">
       <BaseForm
         v-slot="{ meta }"
-        @submit="onSubmit">
+        @submit="onFormSubmit">
 
         <BaseInput
           v-model="model.first_name"
           :label="$t('First Name')"
           :placeholder="$t('John')"
-          name="first_name"
+          name="first name"
           rules="required"
         />
 
@@ -22,7 +22,7 @@
           v-model="model.last_name"
           :label="$t('Last Name')"
           :placeholder="$t('Kennedy')"
-          name="last_name"
+          name="last name"
           rules="required"
         />
 
@@ -32,6 +32,13 @@
           :placeholder="$t('user@email.com')"
           name="email"
           rules="required|email"
+        />
+
+        <BaseInput
+          v-model="model.job_title"
+          :label="$t('Job title')"
+          :placeholder="$t('Developer')"
+          name="job title"
         />
 
         <BaseInput
@@ -47,24 +54,16 @@
           v-model="model.password_confirmation"
           :label="$t('Confirm Password')"
           :placeholder="$t('Password')"
-          name="password_confirmation"
+          name="password confirmation"
           rules="required|confirmed:@password"
           type="password"
         />
 
-        <BaseInput
-          class="my-0 hover:cursor-pointer"
-          v-model="model.terms"
-          :label="$t('I accept the Terms of Service and Privacy Policy')"
-          name="terms"
-          type="checkbox"
-        />
-
         <BaseButton
-          class="mt-5 mb-8"
           :disabled="!meta.valid"
           :label="$t('Sign Up')"
           block
+          class="mt-5 mb-8"
           type="submit"
           variant="primary"
         />
@@ -89,15 +88,24 @@ export default defineComponent({
   data() {
     return {
       model: {
+        first_name: '',
+        last_name: '',
         email: '',
+        job_title: '',
         password: '',
-        remember_me: false
-      }
+        password_confirmation: '',
+      },
     }
   },
   methods: {
-    onSubmit() {
-      this.$error(this.$t('Login not implemented yet'))
+    async onFormSubmit(_, {resetForm}) {
+      try {
+        await this.$store.dispatch('auth/register', this.model);
+        resetForm();
+        this.$success(this.$t('Your account has been created successfully. Please confirm your email.'))
+      } catch (e) {
+        console.warn(e)
+      }
     }
   }
 })

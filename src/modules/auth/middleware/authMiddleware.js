@@ -16,10 +16,15 @@ const defaultRoute = {
 
 export default function authMiddleware(router) {
   router.beforeEach(async (to, from, next) => {
-
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+    const isAuthModule = to.path.includes('/auth') && !to.path.includes('/authors');
+
     if (requiresAuth && !hasToken()) {
       return next(loginRoute);
+    }
+
+    if (isAuthModule && hasToken()) {
+      return next(defaultRoute);
     }
 
     return next();

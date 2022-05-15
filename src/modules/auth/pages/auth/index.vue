@@ -72,30 +72,22 @@ export default defineComponent({
     onFormSubmit() {
       this.login(this.model);
     },
-    async login(data: { email: string; password: string; }) {
-      try {
-        console.log(data)
-        await this.$store.dispatch('auth/login', data);
-        // const redirectTo = this.$route.query.from?.toString() || '/';
-        // await this.$router.push(redirectTo);
-      } catch (e) {
-        console.log(e);
-      }
+    async login(data) {
+      await this.$store.dispatch('auth/login', data);
     },
     async verifyEmail() {
-      // if (!this.$route.query.email || !this.$route.query.token) {
-      //   return;
-      // }
-      // const data = {
-      //   email: this.$route.query.email.replace(' ', '+'),
-      //   token: this.$route.query.token
-      // }
-      // await this.login(data);
-      // this.$success(this.$t('Your account has been activated successfully'))
+      if (!this.$route.query.token) {
+        return;
+      }
+      const data = {
+        token: this.$route.query.token
+      }
+      await this.login(data);
+      this.$success(this.$t('Your account has been activated successfully'))
     }
   },
   mounted() {
-    // this.verifyEmail();
+    this.verifyEmail();
   }
 
 })

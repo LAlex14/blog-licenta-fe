@@ -1,5 +1,6 @@
-import { camelCase, upperFirst } from 'lodash-es'
-import { App } from "vue";
+import {camelCase, upperFirst} from 'lodash-es'
+import {App} from "vue";
+import {Form as VeeForm} from 'vee-validate'
 
 const components = import.meta.globEager('../components/**/(Base|Icon)*.(vue|js)')
 
@@ -14,8 +15,8 @@ export default {
       const componentPath = filePath
         .split('/')
         .pop()
-        .replace(/\.\w+$/, '') 
-      
+        .replace(/\.\w+$/, '')
+
       const componentName = upperFirst(camelCase(componentPath))
       const componentConfig = components[filePath]
       // Register component globally
@@ -27,6 +28,7 @@ export default {
         componentConfig.default || componentConfig
       )
     }
+    Vue.component('BaseForm', VeeForm)
   }
 }
 
