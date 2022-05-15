@@ -162,11 +162,11 @@
                   class="origin-top-left absolute -right-2 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                   <div class="py-1">
                     <MenuItem v-for="option in searchOptions" :key="option.name" v-slot="{ active }">
-                      <a
+                      <router-link
                         :class="[option.current ? 'font-medium text-gray-900' : 'text-gray-500', active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm']"
-                        :href="option.href">
+                        :to="option.href">
                         {{ option.name }}
-                      </a>
+                      </router-link>
                     </MenuItem>
                   </div>
                 </MenuItems>
@@ -259,15 +259,6 @@ const filters = [
       {value: 'white', label: 'White', checked: false},
       {value: 'beige', label: 'Beige', checked: false},
       {value: 'blue', label: 'Blue', checked: false},
-    ],
-  },
-  {
-    id: 'tags',
-    name: 'Tags',
-    options: [
-      {value: 's', label: 'S', checked: false},
-      {value: 'm', label: 'M', checked: false},
-      {value: 'l', label: 'L', checked: false},
     ],
   },
 ]

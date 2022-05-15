@@ -1,10 +1,11 @@
 <template>
   <div class="max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
-    <div v-for="post in posts" :key="post.title" class="flex flex-col rounded-lg shadow-lg overflow-hidden">
+    <div v-for="post in posts" :key="post.title"
+         class="flex flex-col rounded-lg shadow overflow-hidden">
       <div class="flex-shrink-0">
-        <img :src="post.imageUrl" alt="" class="h-48 w-full object-cover"/>
+        <img :src="post.imageUrl" alt="" class="h-48 w-full object-cover rounded-t-lg"/>
       </div>
-      <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+      <div class="flex-1 p-6 bg-white bg-opacity-40 flex flex-col justify-between">
         <div class="flex-1">
           <router-link :to="post.category.href" class="inline-block">
                 <span

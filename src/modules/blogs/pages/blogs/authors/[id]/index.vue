@@ -49,6 +49,9 @@ export default {
 
 <route>
 {
-name: 'ViewBlog'
+name: 'ViewAuthor',
+meta: {
+requiresAuth: true
+}
 }
 </route>

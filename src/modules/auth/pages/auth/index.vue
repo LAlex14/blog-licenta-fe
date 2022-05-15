@@ -1,14 +1,14 @@
 <template>
   <div class="mx-auto w-full max-w-sm lg:w-96">
     <div>
-      <img class="h-12 w-auto" alt="Workflow" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"/>
+      <img alt="Workflow" class="h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"/>
       <h2 class="mt-6 text-3xl font-extrabold text-gray-900">{{ $t('Sign in to your account') }}</h2>
     </div>
 
     <div class="mt-8">
       <BaseForm
         v-slot="{ meta }"
-        @submit="onSubmit">
+        @submit="onFormSubmit">
 
         <BaseInput
           v-model="model.email"
@@ -27,28 +27,18 @@
           type="password"
         />
 
-        <div class="flex items-center justify-between">
-          <BaseInput
-            class="my-0 hover:cursor-pointer"
-            v-model="model.remember_me"
-            :label="$t('Remember me')"
-            name="remember_me"
-            type="checkbox"
-          />
-
-          <router-link
-            class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-            to="/auth/forgot-password"
-          >
-            {{ $t('Forgot your password?') }}
-          </router-link>
-        </div>
+        <router-link
+          class="flex justify-end text-sm font-medium text-indigo-600 hover:text-indigo-500"
+          to="/auth/forgot-password"
+        >
+          {{ $t('Forgot your password?') }}
+        </router-link>
 
         <BaseButton
-          class="my-8"
           :disabled="!meta.valid"
           :label="$t('Sign In')"
           block
+          class="my-6"
           type="submit"
           variant="primary"
         />
@@ -75,15 +65,39 @@ export default defineComponent({
       model: {
         email: '',
         password: '',
-        remember_me: false
       }
     }
   },
   methods: {
-    onSubmit() {
-      this.$error(this.$t('Login not implemented yet'))
+    onFormSubmit() {
+      this.login(this.model);
+    },
+    async login(data: { email: string; password: string; }) {
+      try {
+        console.log(data)
+        await this.$store.dispatch('auth/login', data);
+        // const redirectTo = this.$route.query.from?.toString() || '/';
+        // await this.$router.push(redirectTo);
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    async verifyEmail() {
+      // if (!this.$route.query.email || !this.$route.query.token) {
+      //   return;
+      // }
+      // const data = {
+      //   email: this.$route.query.email.replace(' ', '+'),
+      //   token: this.$route.query.token
+      // }
+      // await this.login(data);
+      // this.$success(this.$t('Your account has been activated successfully'))
     }
+  },
+  mounted() {
+    // this.verifyEmail();
   }
+
 })
 </script>
 <route>

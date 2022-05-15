@@ -12,16 +12,20 @@
           </router-link>
           <div class="hidden lg:ml-6 lg:flex lg:space-x-8">
             <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
-            <a class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-               href="/blogs"> Blogs </a>
-            <a
+            <router-link
+              class="border-indigo-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+              to="/blogs"> Blogs
+            </router-link>
+            <router-link
               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              href="/blogs/followed">
-              Followed </a>
-            <a
+              to="/blogs/saved">
+              Saved
+            </router-link>
+            <router-link
               class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
-              href="/blogs/authors">
-              Authors </a>
+              to="/blogs/authors">
+              Authors
+            </router-link>
           </div>
         </div>
         <div class="flex items-center lg:hidden">
@@ -65,16 +69,21 @@
               <MenuItems
                 class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <MenuItem v-slot="{ active }">
-                  <a :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']" href="#">Your
-                    Profile</a>
+                  <router-link :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']" to="#">
+                    Your
+                    Profile
+                  </router-link>
                 </MenuItem>
                 <MenuItem v-slot="{ active }">
-                  <a :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
-                     href="#">Settings</a>
+                  <router-link :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']"
+                               to="#">Settings
+                  </router-link>
                 </MenuItem>
                 <MenuItem v-slot="{ active }">
-                  <a :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']" href="#">Sign
-                    out</a>
+                  <router-link :class="[active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm text-gray-700']" to="#">
+                    Sign
+                    out
+                  </router-link>
                 </MenuItem>
               </MenuItems>
             </transition>
@@ -88,24 +97,24 @@
         <DisclosureButton
           as="a"
           class="bg-indigo-50 border-indigo-500 text-indigo-700 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-          href="#">Dashboard
+          to="#">Dashboard
         </DisclosureButton>
         <DisclosureButton
           as="a"
           class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-          href="#">
+          to="#">
           Team
         </DisclosureButton>
         <DisclosureButton
           as="a"
           class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-          href="#">
+          to="#">
           Projects
         </DisclosureButton>
         <DisclosureButton
           as="a"
           class="border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800 block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
-          href="#">
+          to="#">
           Calendar
         </DisclosureButton>
       </div>
@@ -124,15 +133,15 @@
         <div class="mt-3 space-y-1">
           <DisclosureButton
             as="a" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-            href="#">Your Profile
+            to="#">Your Profile
           </DisclosureButton>
           <DisclosureButton
             as="a" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-            href="#">Settings
+            to="#">Settings
           </DisclosureButton>
           <DisclosureButton
             as="a" class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-            href="#">Sign out
+            to="#">Sign out
           </DisclosureButton>
         </div>
       </div>
@@ -155,7 +164,6 @@ const navigation = [
   {name: 'Blogs', href: '#'},
   {name: 'Categories', href: '#'},
   {name: 'Authors', href: '#'},
-  {name: 'Tags', href: '#'},
 ]
 const userNavigation = [
   {name: 'Your Profile', href: '#'},

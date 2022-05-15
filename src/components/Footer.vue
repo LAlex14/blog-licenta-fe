@@ -3,10 +3,11 @@
   <footer class="bg-white border border-top absolute bottom-0 left-0 right-0">
     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 md:flex md:items-center md:justify-between lg:px-8">
       <div class="flex justify-center space-x-6 md:order-2">
-        <a class="text-gray-400 hover:text-gray-500" v-for="item in navigation" :key="item.name" :href="item.href">
+        <router-link v-for="item in navigation" :key="item.name" :to="item.href"
+                     class="text-gray-400 hover:text-gray-500">
           <span class="sr-only">{{ item.name }}</span>
-          <component class="h-6 w-6" :is="item.icon" aria-hidden="true"/>
-        </a>
+          <component :is="item.icon" aria-hidden="true" class="h-6 w-6"/>
+        </router-link>
       </div>
       <div class="mt-4 md:mt-0 md:order-1">
         <p class="text-center text-sm text-gray-400">&copy; 2020 Workflow, Inc. All rights reserved.</p>

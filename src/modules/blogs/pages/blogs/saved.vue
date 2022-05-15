@@ -230,12 +230,15 @@ const posts = [
 
 <script>
 export default {
-  name: "followed",
+  name: "saved",
 }
 </script>
 <route>
 {
-name: 'Followed'
+name: 'SavedBolgs',
+meta: {
+requiresAuth: true
+}
 }
 </route>
 
