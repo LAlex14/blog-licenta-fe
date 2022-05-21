@@ -1,5 +1,5 @@
 <template>
-  <Disclosure v-slot="{ open }" as="nav" class="bg-white shadow fixed top-0 left-0 right-0 z-50 px-2 sm:px-4 lg:px-8">
+  <Disclosure v-slot="{ open }" as="nav" class="bg-white shadow fixed top-0 left-0 right-0 z-40 px-2 sm:px-4 lg:px-8">
     <div class="max-w-7xl mx-auto ">
       <div class="flex justify-between h-16">
         <div class="flex px-2 lg:px-0">
@@ -11,17 +11,17 @@
                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"/>
           </router-link>
           <div class="hidden lg:ml-6 lg:flex lg:space-x-8">
-            <router-link
+            <div
               v-for="page in pages"
               :class="{
                 'border-indigo-500 text-gray-900': currentRouteName === page.routeName,
                 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700': currentRouteName !== page.routeName
               }"
-              :to="page.to"
-              class="px-1 pt-1 border-b-2 text-sm font-medium items-center inline-flex"
+              class="px-1 pt-1 border-b-2 text-sm font-medium items-center inline-flex cursor-pointer"
+              @click="goToPage(page)"
             >
               {{ $t(page.name) }}
-            </router-link>
+            </div>
           </div>
         </div>
         <div class="flex items-center lg:hidden">
@@ -94,7 +94,7 @@
             v-for="page in authPages"
             :class="{
                 'text-gray-500 hover:text-gray-900': page.routeName === 'Login',
-                'inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-indigo-600 bg-origin-border px-3 py-1.5 border border-transparent rounded-md shadow-sm text-white hover:from-blue-700 hover:to-indigo-700': page.routeName === 'Register'
+                'inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-purple-600 bg-origin-border px-3 py-1.5 border border-transparent rounded-md shadow-sm text-white hover:from-blue-700 hover:to-purple-700': page.routeName === 'Register'
               }"
             :to="page.to"
             class="whitespace-nowrap text-base font-medium"
@@ -106,17 +106,17 @@
     </div>
     <DisclosurePanel class="lg:hidden">
       <div class="py-2 space-y-1">
-        <router-link
+        <div
           v-for="page in pages"
           :class="{
                 'bg-indigo-50 border-indigo-500 text-indigo-700': currentRouteName === page.routeName,
                 'border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800': currentRouteName !== page.routeName
               }"
-          :to="page.to"
-          class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium"
+          class="block pl-3 pr-4 py-2 border-l-4 text-base font-medium cursor-pointer"
+          @click="goToPage(page)"
         >
           {{ $t(page.name) }}
-        </router-link>
+        </div>
       </div>
       <div
         v-if="isLoggedIn"
@@ -162,12 +162,14 @@
       </div>
     </DisclosurePanel>
   </Disclosure>
+  <AuthModal v-model="showAuthModal"/>
 </template>
 
 <script setup>
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 import {PlusSmIcon} from '@heroicons/vue/solid'
 import {MenuIcon, XIcon} from '@heroicons/vue/outline'
+import AuthModal from "@/components/AuthModal.vue";
 
 const pages = [
   {
@@ -205,6 +207,11 @@ const authPages = [
 
 <script>
 export default {
+  data() {
+    return {
+      showAuthModal: false,
+    }
+  },
   computed: {
     isLoggedIn() {
       return this.$store.state.auth.isLoggedIn;
@@ -217,6 +224,13 @@ export default {
     logout() {
       this.$store.dispatch('auth/logout')
     },
+    goToPage(page) {
+      if (!this.isLoggedIn && (page.name === 'Saved' || page.name === 'Authors')) {
+        this.showAuthModal = true;
+        return;
+      }
+      this.$router.push(page.to)
+    }
   },
 }
 </script>

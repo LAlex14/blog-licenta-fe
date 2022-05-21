@@ -1,9 +1,10 @@
 <template>
   <Navbar/>
-  <FilterBar class="pt-16"/>
-  <main class="relative bg-gray-50 pb-20 px-4 sm:px-6 lg:px-8 min-h-full min-w-full">
-    <div class="hidden lg:block lg:absolute lg:inset-y-0 lg:h-full lg:w-full">
-      <div aria-hidden="true" class="relative h-full text-lg max-w-prose mx-auto">
+
+  <main class="fixed top-16 bottom-0 bg-gray-50 min-w-full overflow-x-hidden">
+    <FilterBar v-if="showFilterBar"/>
+    <div class="hidden lg:block lg:absolute lg:inset-y-0 lg:w-full">
+      <div aria-hidden="true" class="relative text-lg max-w-prose mx-auto">
         <svg class="absolute top-12 left-full transform translate-x-32" fill="none" height="384" viewBox="0 0 404 384"
              width="404">
           <defs>
@@ -36,10 +37,12 @@
         </svg>
       </div>
     </div>
-    <div class="relative py-16 max-w-7xl mx-auto">
-      <slot/>
+    <div class="relative min-h-full px-4 sm:px-6 lg:px-8 pb-20">
+      <div class="py-16 max-w-7xl mx-auto">
+        <slot/>
+      </div>
+      <Footer/>
     </div>
-    <Footer/>
   </main>
 </template>
 
@@ -51,5 +54,11 @@ import FilterBar from "@/modules/blogs/components/FilterBar.vue";</script>
 <script>
 export default {
   name: "MainTemplate.vue",
+  computed: {
+    showFilterBar() {
+      const routeName = this.$route.name;
+      return routeName === 'Blogs' || routeName === 'Authors';
+    }
+  }
 }
 </script>

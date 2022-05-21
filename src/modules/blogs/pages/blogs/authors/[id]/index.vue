@@ -38,11 +38,14 @@
 </template>
 
 <script>
+
 export default {
   name: "authors",
-  id: {
-    type: String,
-    default: '1',
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
   }
 }
 </script>

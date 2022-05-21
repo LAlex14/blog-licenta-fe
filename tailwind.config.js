@@ -8,7 +8,10 @@ module.exports = {
   darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
-      colors: {}
+      colors: {},
+      inset: {
+        18: '4.5rem',
+      }
     },
   },
   variants: {

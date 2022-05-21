@@ -1,23 +1,22 @@
 <template>
-  <MainTemaplate>
+  <MainTemplate>
     <router-view></router-view>
-  </MainTemaplate>
+  </MainTemplate>
 </template>
 
 <script setup>
-import MainTemaplate from "@/modules/common/components/MainTemplate.vue";</script>
+import MainTemplate from "@/modules/common/components/MainTemplate.vue";</script>
 
 <script>
 export default {
   name: "blogs.vue",
   props: {
-    id: {
+    slug: {
       type: String,
-      default: '1',
-    }
+    },
   },
   async created() {
-    await this.$store.dispatch('blogs/getPublicBlogs');
+    await this.$store.dispatch('publicBlogs/getPublicBlogs');
   }
 }
 </script>

@@ -38,6 +38,7 @@ export default {
     })
     localStorage.clear();
     delete axios.defaults.headers.common['Authorization'];
+    await store.dispatch('publicBlogs/getPublicBlogs');
     await router.push('/blogs');
   },
 

@@ -11,7 +11,7 @@
                   {{ blog.category?.name }}
                 </span>
         </router-link>
-        <router-link class="block mt-2" to="/blogs/3">
+        <router-link :to="`/blogs/${blog.slug}`" class="block mt-2">
           <p class="text-xl font-semibold text-gray-900">
             {{ blog.title }}
           </p>
@@ -82,9 +82,6 @@ export default {
       return event.toLocaleDateString('ro-RO')
     }
   },
-  created() {
-    console.log(this.blog)
-  }
 }
 </script>
 

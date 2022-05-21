@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
     <BlogCard
-      v-for="blog in blogs"
+      v-for="blog in publicBlogs"
       :key="blog.id"
       :blog="blog"
     />
@@ -19,8 +19,8 @@ export default {
     isLoggedIn() {
       return this.$store.state.auth.isLoggedIn;
     },
-    blogs() {
-      return this.$store.state.blogs.blogs;
+    publicBlogs() {
+      return this.$store.state.publicBlogs.blogs;
     }
   },
 }
