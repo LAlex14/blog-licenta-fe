@@ -8,10 +8,6 @@ export default {
     localStorage.setItem('token', token);
   },
 
-  getToken() {
-    return localStorage.getItem('token');
-  },
-
   async login(loginData) {
     const endpoint = loginData.token ? '/verify' : '/login'
     const {data} = await axios.post(endpoint, loginData);
@@ -42,7 +38,7 @@ export default {
     })
     localStorage.clear();
     delete axios.defaults.headers.common['Authorization'];
-    await router.push('/login');
+    await router.push('/blogs');
   },
 
   async changePassword(data) {

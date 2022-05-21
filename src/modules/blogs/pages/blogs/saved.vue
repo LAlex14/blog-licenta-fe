@@ -235,7 +235,7 @@ export default {
 </script>
 <route>
 {
-name: 'SavedBolgs',
+name: 'SavedBlogs',
 meta: {
 requiresAuth: true
 }

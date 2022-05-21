@@ -16,5 +16,8 @@ export default {
       default: '1',
     }
   },
+  async created() {
+    await this.$store.dispatch('blogs/getPublicBlogs');
+  }
 }
 </script>

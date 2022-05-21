@@ -6,8 +6,5 @@ export default defineComponent({
     // Handle auth logic here, redirect to login or home if logged in
     next('/blogs')
   },
-  created() {
-    console.log(this.$route)
-  }
 })
 </script>
