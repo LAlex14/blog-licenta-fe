@@ -7,7 +7,11 @@
       <div class="flex-1">
         <router-link :to="blogsByCategory" class="inline-block">
                 <span
-                  :class="[blog.category?.color || 'bg-indigo-100 text-indigo-800', 'inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium']">
+                  :class="[
+                    randomColor(), 
+                    'inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium'
+                  ]"
+                >
                   {{ blog.category?.name }}
                 </span>
         </router-link>
@@ -48,8 +52,13 @@
   </div>
 </template>
 
+<script setup>
+import {randomColor} from "@/modules/common/utils/colorsUtils";</script>
+
 <script>
-const defaultImageUrl = 'https://images.assetsdelivery.com/compings_v2/yehorlisnyi/yehorlisnyi2104/yehorlisnyi210400016.jpg'
+const defaultImageUrl = 'https://images.assetsdelivery.com/compings_v2/yehorlisnyi/yehorlisnyi2104/yehorlisnyi210400016.jpg';
+const defaultUserAvatar = 'https://www.weact.org/wp-content/uploads/2016/10/Blank-profile.png';
+
 export default {
   name: "BlogCard",
   props: {
@@ -66,13 +75,13 @@ export default {
       return this.blog?.image || defaultImageUrl;
     },
     blogCreatorAvatar() {
-      return this.blog?.creator.avatar || defaultImageUrl;
+      return this.blog?.creator.avatar || defaultUserAvatar;
     },
     blogsByCategory() {
       return `/blogs?category_id=${this.blog.category.id}`;
     },
     blogCreatorLink() {
-      return `/blogs/creators/${this.blog.creator.id}`
+      return `/blogs/authors/${this.blog.creator.id}`
     },
     blogCreatorName() {
       return this.blog.creator?.first_name;

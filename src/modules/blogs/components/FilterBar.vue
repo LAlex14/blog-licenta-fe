@@ -168,7 +168,7 @@
                           leave-to-class="transform opacity-0 scale-95">
                 <MenuItems
                   v-if="isLoggedIn"
-                  class="origin-top-left absolute left-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  class="origin-top-left absolute left-0 sm:left-auto sm:right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <div class="py-1">
                     <MenuItem v-for="option in searchOptions" :key="option.name" v-slot="{ active }">

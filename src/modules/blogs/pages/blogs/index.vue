@@ -6,10 +6,15 @@
       :blog="blog"
     />
   </div>
+  <div
+    :class="colorClasses"
+    class="hidden"
+  />
 </template>
 
 <script setup>
-import BlogCard from "@/modules/blogs/components/BlogCard.vue";</script>
+import BlogCard from "@/modules/blogs/components/BlogCard.vue";
+import {colorClasses} from "@/modules/common/utils/colorsUtils";</script>
 
 <script>
 

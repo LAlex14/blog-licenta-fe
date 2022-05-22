@@ -1,5 +1,5 @@
 <template>
-  <ul class="space-y-12 sm:grid sm:grid-cols-2 xl:grid-cols-3 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:gap-x-8"
+  <ul class="space-y-12 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-x-6 sm:gap-y-12 sm:space-y-0 lg:gap-x-8"
       role="list">
     <li
       v-for="person in people"
@@ -108,7 +108,13 @@ const people = [
 
 <script>
 export default {
-  name: "index.vue"
+  name: "index.vue",
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  }
 }
 </script>
 
