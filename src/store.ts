@@ -3,12 +3,10 @@ import {createStore} from 'vuex-extensions'
 import createPersistedState from "vuex-persistedstate";
 import {State as AuthState} from "@/modules/auth/store/authModule";
 import {State as BlogsState} from "@/modules/blogs/store/blogsModule";
-import {State as PublicBlogsState} from "@/modules/blogs/store/publicBlogsModule";
 
 export type RootState = {
   auth: AuthState,
   blogs: BlogsState,
-  publicBlogs: PublicBlogsState,
 };
 
 interface Modules {
@@ -38,7 +36,7 @@ function getStoreModules() {
 export default createStore(Store, {
   plugins: [
     createPersistedState({
-      paths: ['auth', 'blogs', 'publicBlogs']
+      paths: ['auth', 'blogs']
     })
   ],
   modules: {

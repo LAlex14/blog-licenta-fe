@@ -53,14 +53,13 @@
               {{ blogCreatorName }}
             </router-link>
           </p>
-          <div class="flex space-x-1 text-sm text-gray-500">
+          <div class="flex flex-wrap space-x-1 text-sm text-gray-500">
             <time :datetime="blog.created_at">
               {{ createdAt }}
             </time>
-            <span aria-hidden="true"> &middot; </span>
-            <span> {{ blog.readings }} read </span>
-            <span aria-hidden="true"> &middot; </span>
-            <span> {{ blog.views }} views  </span>
+            <span> &middot; {{ blog.views + ' ' + $t('views') }}</span>
+            <span> &middot; {{ blog.readings + ' ' + $t('readings') }} </span>
+            <span v-if="isLoggedIn"> &middot; {{ blog.likes_count + ' ' + $t('likes') }} </span>
           </div>
         </div>
       </div>
@@ -109,7 +108,7 @@ export default {
       return `/blogs/authors/${this.blog.creator.id}`
     },
     blogCreatorName() {
-      return this.blog.creator?.first_name;
+      return `${this.blog.creator?.first_name} ${this.blog.creator?.last_name}`;
     },
     createdAt() {
       let event = new Date(this.blog.created_at);

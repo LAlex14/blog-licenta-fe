@@ -9,6 +9,11 @@ function commonParams(params = {}) {
 
 export default {
 
+  async getPublicBlogs(params) {
+    const {data} = await axios.get('/blogs', {params: commonParams(params)});
+    return data;
+  },
+
   async getBlogs(params) {
     const {data} = await axios.get('/restify/blogs?related=category,creator', {params: commonParams(params)});
     data.forEach((blog, index) => {
@@ -60,4 +65,11 @@ export default {
     return data;
   },
 
+  async addViewOnBlog(blogId) {
+    await axios.post(`/restify/blogs/${blogId}/actions?action=add-view-on-blog`);
+  },
+
+  async addReadingOnBlog(blogId) {
+    await axios.post(`/restify/blogs/${blogId}/actions?action=add-readings-on-blog`);
+  }
 }

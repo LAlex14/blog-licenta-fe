@@ -39,7 +39,7 @@ export default {
     },
     async getPublicData() {
       await Promise.all([
-        this.$store.dispatch('publicBlogs/getPublicBlogs')
+        this.$store.dispatch('blogs/getPublicBlogs')
       ]);
     },
     async getData() {

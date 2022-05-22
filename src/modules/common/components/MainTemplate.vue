@@ -56,7 +56,7 @@ export default {
   computed: {
     showFilterBar() {
       const routeName = this.$route.name;
-      return routeName === 'Blogs' || routeName === 'Authors';
+      return routeName === 'Blogs' || routeName === 'SavedBlogs' || routeName === 'Authors';
     }
   }
 }

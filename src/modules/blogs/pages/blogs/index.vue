@@ -1,5 +1,5 @@
 <template>
-  <BlogsList :blogs="blogs"/>
+  <BlogsList :blogs="filteredBlogs"/>
 </template>
 
 <script setup>
@@ -10,17 +10,26 @@ import BlogsList from "@/modules/blogs/components/BlogsList.vue";</script>
 export default {
   name: "index.vue",
   computed: {
-    isLoggedIn() {
-      return this.$store.state.auth.isLoggedIn;
-    },
-    publicBlogs() {
-      return this.$store.state.publicBlogs.blogs;
-    },
-    authBlogs() {
-      return this.$store.state.blogs.blogs;
-    },
     blogs() {
-      return this.isLoggedIn ? this.authBlogs : this.publicBlogs;
+      return this.$store.getters['blogs/blogs'];
+    },
+    filteredBlogs() {
+      return this.blogs.filter(blog => {
+        const categoryId = blog.category.id;
+        const userId = blog.creator.id;
+        const queryUserIds = this.$route.query['user_id']?.split(',');
+        const queryCategoryIds = this.$route.query['category_id']?.split(',');
+        if (queryUserIds && queryCategoryIds) {
+          return queryUserIds.includes(userId) && queryCategoryIds.includes(categoryId);
+        }
+        if (queryUserIds) {
+          return queryUserIds.includes(userId);
+        }
+        if (queryCategoryIds) {
+          return queryCategoryIds.includes(categoryId);
+        }
+        return this.blogs
+      })
     }
   },
 }

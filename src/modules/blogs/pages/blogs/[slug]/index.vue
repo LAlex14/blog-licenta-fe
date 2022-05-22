@@ -30,15 +30,18 @@
       />
     </div>
     <div class="mt-7 sm:flex justify-between text-sm font-medium text-gray-600">
-      <div class="text-indigo-500">
+      <router-link
+        :to="`/blogs/authors/${this.blog.creator.id}`"
+        class="text-indigo-500"
+      >
         @{{ authorFullName }}
-      </div>
+      </router-link>
       <div>{{ $t('Posted on:') }} {{ createdDate }}</div>
     </div>
     <div class="flex space-x-1 text-sm text-gray-500">
-      <span> {{ blog.readings }} read </span>
-      <span aria-hidden="true"> &middot; </span>
-      <span> {{ blog.views }} views  </span>
+      <span>{{ blog.views + ' ' + $t('views') }}</span>
+      <span> &middot; {{ blog.readings + ' ' + $t('readings') }} </span>
+      <span> &middot; {{ blog.likes_count + ' ' + $t('likes') }} </span>
     </div>
   </div>
   <AuthModal v-model="showAuthModal"/>
@@ -89,19 +92,14 @@ export default {
       let date = new Date(this.blog.created_at);
       return date.toLocaleDateString(this.$t('locales'), dateOptions);
     },
-    publicBlogs() {
-      return this.$store.state.publicBlogs.blogs;
-    },
-    authBlogs() {
-      return this.$store.state.blogs.blogs;
-    },
     blogs() {
-      return this.isLoggedIn ? this.authBlogs : this.publicBlogs;
+      return this.$store.getters['blogs/blogs'];
     }
   },
   methods: {
     async getBlog() {
       this.blog = this.blogs.find(blog => blog.slug === this.slug)
+      await this.$store.dispatch('blogs/addViewOnBlog', this.blog.id);
     }
   },
   async created() {

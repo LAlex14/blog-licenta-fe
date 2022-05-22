@@ -89,16 +89,22 @@
         <div class="max-w-7xl mx-auto flex items-center justify-between">
           <div class="hidden sm:flex items-center">
             <div class="flow-root">
-              <PopoverGroup class="-mx-4 flex items-center">
-                <Popover v-for="(section, sectionIdx) in filters" :key="section.name"
+              <PopoverGroup
+                v-if="!authorsPage"
+                class="-mx-4 flex items-center"
+              >
+                <Popover v-for="(section) in filters" :key="section.name"
                          class="px-4 relative inline-block text-left">
                   <PopoverButton
                     class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
                     @click="showModal"
                   >
                     <span>{{ section.name }}</span>
-                    <span v-if="sectionIdx === 0"
-                          class="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums">1</span>
+                    <span
+                      class="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums"
+                    >
+                      {{ filter[section.id].length }}
+                    </span>
                     <ChevronDownIcon aria-hidden="true"
                                      class="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"/>
                   </PopoverButton>
@@ -114,15 +120,22 @@
                       class="origin-top-right absolute left-0 mt-2 bg-white rounded-md shadow-2xl p-4 ring-1 ring-black ring-opacity-5 focus:outline-none"
                     >
                       <form class="space-y-4">
-                        <div v-for="(option, optionIdx) in section.options" :key="option.value"
+                        <div v-for="(option, optionIdx) in section.options" :key="option.id"
                              class="flex items-center">
-                          <input :id="`filter-${section.id}-${optionIdx}`" :checked="option.checked"
-                                 :name="`${section.id}[]`" :value="option.value"
-                                 class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
-                                 type="checkbox"/>
-                          <label :for="`filter-${section.id}-${optionIdx}`"
-                                 class="ml-3 pr-6 text-sm font-medium text-gray-900 whitespace-nowrap">
-                            {{ option.label }}
+                          <input
+                            :id="`filter-${section.id}-${optionIdx}`"
+                            :checked="isChecked(section.id, option.id)"
+                            :name="`${section.id}`"
+                            :value="option.id"
+                            class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                            type="checkbox"
+                            @change="onChangeCheckbox"
+                          />
+                          <label
+                            :for="`filter-${section.id}-${optionIdx}`"
+                            class="ml-3 pr-6 text-sm font-medium text-gray-900 whitespace-nowrap"
+                          >
+                            {{ option.name || `${option.first_name} ${option.last_name}` }}
                           </label>
                         </div>
                       </form>
@@ -220,46 +233,87 @@ const searchOptions = [
   {name: 'Best Rating', href: '#', current: false},
   {name: 'Newest', href: '#', current: false},
 ]
-const filters = [
-  {
-    id: 'authors',
-    name: 'Authors',
-    options: [
-      {value: 'new-arrivals', label: 'All New Arrivals', checked: false},
-      {value: 'tees', label: 'Tees', checked: false},
-      {value: 'objects', label: 'Objects', checked: true},
-    ],
-  },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      {value: 'white', label: 'White', checked: false},
-      {value: 'beige', label: 'Beige', checked: false},
-      {value: 'blue', label: 'Blue', checked: false},
-    ],
-  },
-]
-
 </script>
 
 <script>
 export default {
+  data() {
+    return {
+      showAuthModal: false,
+      open: false,
+      filter: {
+        user_id: [],
+        category_id: []
+      }
+    }
+  },
   computed: {
     isLoggedIn() {
       return this.$store.state.auth.isLoggedIn;
     },
     categories() {
-      return this.$store.state.blogs.categories;
+      return {
+        id: 'category_id',
+        name: this.$t('Category'),
+        options: this.$store.state.blogs.categories
+      };
+    },
+    authors() {
+      return {
+        id: 'user_id',
+        name: this.$t('Authors'),
+        options: this.$store.state.blogs.authors
+      };
+    },
+    filters() {
+      return [
+        this.authors,
+        this.categories
+      ]
+    },
+    authorsPage() {
+      return this.$route.name === 'Authors'
     }
   },
-  data() {
-    return {
-      showAuthModal: false,
-      open: false,
+  watch: {
+    '$route.path': {
+      handler(val, oldVal) {
+        if (val === oldVal) {
+          return
+        }
+        this.filter = {
+          user_id: [],
+          category_id: []
+        }
+      }
+    },
+    filter: {
+      deep: true,
+      handler(val) {
+        this.$router.push({
+          query: {
+            ...this.$route.query,
+            user_id: val['user_id'].length ? val['user_id'].join(',') : undefined,
+            category_id: val['category_id'].length ? val['category_id'].join(',') : undefined,
+          }
+        })
+      }
     }
   },
   methods: {
+    isChecked(filter_option, filter_value) {
+      return this.filter[filter_option].includes(filter_value);
+    },
+    onChangeCheckbox($evt) {
+      const filter_option = $evt.target.name;
+      const filter_value = $evt.target.value;
+      if (!this.filter[filter_option].includes(filter_value)) {
+        this.filter[filter_option].push(filter_value)
+      } else {
+        const elIndex = this.filter[filter_option].findIndex(el => el === filter_value);
+        this.filter[filter_option].splice(elIndex, 1);
+      }
+    },
     showModal() {
       if (this.isLoggedIn) {
         return;
