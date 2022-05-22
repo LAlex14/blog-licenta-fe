@@ -33,14 +33,14 @@ const actions: ActionTree<State, RootState> = {
       AuthService.setToken(plainTextToken);
       await router.push('/');
     } catch (err) {
-      console.warn(err)
+      throw err
     }
   },
   async register({commit}, data) {
     try {
       await AuthService.register(data)
     } catch (err) {
-      console.warn(err)
+      throw err
       throw err
     }
   },

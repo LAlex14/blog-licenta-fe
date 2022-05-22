@@ -1,9 +1,9 @@
 <template>
   <div>
     <img
-      v-if="blog.image"
+      v-if="blogImage"
       :alt="$t('blog cover image')"
-      :src="blog.image"
+      :src="blogImage"
       class="object-cover mx-auto mb-5 rounded-lg max-h-80"
     />
     <div class="text-lg">
@@ -60,7 +60,7 @@ export default {
   props: {
     slug: {
       type: String,
-      required: true
+      required: true,
     },
   },
   data() {
@@ -76,6 +76,9 @@ export default {
     hidePrivateBlog() {
       return this.blog?.private && !this.isLoggedIn;
     },
+    blogImage() {
+      return this.blog?.public_image || this.blog?.image;
+    },
     authorFullName() {
       return `${this.blog?.creator?.first_name} ${this.blog?.creator?.last_name}`
     },
@@ -85,15 +88,20 @@ export default {
       }
       let date = new Date(this.blog.created_at);
       return date.toLocaleDateString(this.$t('locales'), dateOptions);
+    },
+    publicBlogs() {
+      return this.$store.state.publicBlogs.blogs;
+    },
+    authBlogs() {
+      return this.$store.state.blogs.blogs;
+    },
+    blogs() {
+      return this.isLoggedIn ? this.authBlogs : this.publicBlogs;
     }
   },
   methods: {
     async getBlog() {
-      try {
-        this.blog = await this.$store.dispatch('publicBlogs/getBlogBySlug', this.slug);
-      } catch (e) {
-        await this.$router.push('/blogs');
-      }
+      this.blog = this.blogs.find(blog => blog.slug === this.slug)
     }
   },
   async created() {

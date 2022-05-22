@@ -1,6 +1,5 @@
 <template>
   <Navbar/>
-
   <main class="fixed top-16 bottom-0 bg-gray-50 min-w-full overflow-x-hidden">
     <FilterBar v-if="showFilterBar"/>
     <div class="hidden lg:block lg:absolute lg:inset-y-0 lg:w-full">

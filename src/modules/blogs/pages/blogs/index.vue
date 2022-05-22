@@ -1,20 +1,9 @@
 <template>
-  <div class="max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none">
-    <BlogCard
-      v-for="blog in publicBlogs"
-      :key="blog.id"
-      :blog="blog"
-    />
-  </div>
-  <div
-    :class="colorClasses"
-    class="hidden"
-  />
+  <BlogsList :blogs="blogs"/>
 </template>
 
 <script setup>
-import BlogCard from "@/modules/blogs/components/BlogCard.vue";
-import {colorClasses} from "@/modules/common/utils/colorsUtils";</script>
+import BlogsList from "@/modules/blogs/components/BlogsList.vue";</script>
 
 <script>
 
@@ -26,6 +15,12 @@ export default {
     },
     publicBlogs() {
       return this.$store.state.publicBlogs.blogs;
+    },
+    authBlogs() {
+      return this.$store.state.blogs.blogs;
+    },
+    blogs() {
+      return this.isLoggedIn ? this.authBlogs : this.publicBlogs;
     }
   },
 }

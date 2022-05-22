@@ -6,6 +6,7 @@
     "moduleResolution": "node",
     "noImplicitAny": false,
     "useUnknownInCatchVariables": false,
+    "suppressExcessPropertyErrors": true,
     "checkJs": false,
     "strict": false,
     "jsx": "preserve",

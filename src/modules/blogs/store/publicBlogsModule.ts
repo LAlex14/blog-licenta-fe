@@ -22,17 +22,9 @@ const actions: ActionTree<State, RootState> = {
       const {data} = await publicBlogsService.getBlogs(params);
       commit('setBlogs', data);
     } catch (err) {
-      console.warn(err)
+      throw err
     }
   },
-  async getBlogBySlug({state}, slug) {
-    const blog = state.blogs.find(blog => blog['slug'] === slug)
-    if (blog) {
-      return blog;
-    }
-
-    return await publicBlogsService.getBlogBySlug(slug);
-  }
 };
 const getters: GetterTree<State, RootState> = {
   blogs: state => state.blogs,

@@ -3,9 +3,10 @@
     <div class="flex-shrink-0">
       <img :src="blogImage" alt="" class="h-48 w-full object-cover rounded-t-lg"/>
     </div>
-    <div class="flex-1 p-6 bg-white bg-opacity-40 flex flex-col justify-between">
+    <div class="flex-1 p-6 bg-white hover:bg-gray-100 bg-opacity-40 hover:bg-opacity-40 flex flex-col justify-between">
       <div class="flex-1">
-        <router-link :to="blogsByCategory" class="inline-block">
+        <div class="flex justify-between items-center">
+          <router-link :to="blogsByCategory" class="inline-block">
                 <span
                   :class="[
                     randomColor(), 
@@ -14,7 +15,22 @@
                 >
                   {{ blog.category?.name }}
                 </span>
-        </router-link>
+          </router-link>
+          <div
+            v-if="isLoggedIn"
+            class="cursor-pointer"
+            @click="pinBlog"
+          >
+            <PinnedIcon
+              v-if="blog.is_pinned"
+              class="h-5"
+            />
+            <UnpinnedIcon
+              v-else
+              class="h-5"
+            />
+          </div>
+        </div>
         <router-link :to="`/blogs/${blog.slug}`" class="block mt-2">
           <p class="text-xl font-semibold text-gray-900">
             {{ blog.title }}
@@ -53,9 +69,14 @@
 </template>
 
 <script setup>
-import {randomColor} from "@/modules/common/utils/colorsUtils";</script>
+import {randomColor} from "@/modules/common/utils/colorsUtils";
+import {BookmarkIcon as PinnedIcon} from '@heroicons/vue/solid'
+import {BookmarkIcon as UnpinnedIcon} from '@heroicons/vue/outline'</script>
 
 <script>
+import {STORAGE_URL} from "@/modules/common/utils/linkUtils";
+import BlogsService from "@/modules/blogs/services/BlogsService.js";
+
 const defaultImageUrl = 'https://images.assetsdelivery.com/compings_v2/yehorlisnyi/yehorlisnyi2104/yehorlisnyi210400016.jpg';
 const defaultUserAvatar = 'https://www.weact.org/wp-content/uploads/2016/10/Blank-profile.png';
 
@@ -72,10 +93,14 @@ export default {
       return this.$store.state.auth.isLoggedIn;
     },
     blogImage() {
-      return this.blog?.image || defaultImageUrl;
+      return this.blog?.public_image || this.blog?.image || defaultImageUrl;
     },
     blogCreatorAvatar() {
-      return this.blog?.creator.avatar || defaultUserAvatar;
+      const avatar = this.blog?.creator.avatar;
+      if (avatar) {
+        return avatar.includes('http') ? avatar : STORAGE_URL + avatar;
+      }
+      return defaultUserAvatar;
     },
     blogsByCategory() {
       return `/blogs?category_id=${this.blog.category.id}`;
@@ -89,8 +114,20 @@ export default {
     createdAt() {
       let event = new Date(this.blog.created_at);
       return event.toLocaleDateString('ro-RO')
+    },
+    userId() {
+      return this.$store.state.auth.user.id;
     }
   },
+  methods: {
+    async pinBlog() {
+      await this.$store.dispatch('blogs/pinBlog', {
+        blogId: this.blog.id,
+        users: [`${this.userId}`],
+      })
+
+    }
+  }
 }
 </script>
 

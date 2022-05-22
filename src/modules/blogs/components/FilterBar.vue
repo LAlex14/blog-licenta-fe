@@ -249,6 +249,9 @@ export default {
     isLoggedIn() {
       return this.$store.state.auth.isLoggedIn;
     },
+    categories() {
+      return this.$store.state.blogs.categories;
+    }
   },
   data() {
     return {
