@@ -71,7 +71,7 @@ const reasons = [
   'See all authors and their stats',
   'Read private blogs completely',
   'Create and edit Blogs',
-  'Left Comments',
+  'Write and read comments',
   'Save blogs',
   'Rate blogs',
 ];

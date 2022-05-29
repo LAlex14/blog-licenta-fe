@@ -24,7 +24,7 @@ const mutations: MutationTree<State> = {
 };
 
 const actions: ActionTree<State, RootState> = {
-  async login({commit, dispatch}, loginData) {
+  async login({commit}, loginData) {
     try {
       const {user, token} = await AuthService.login(loginData);
       const {plainTextToken} = token;

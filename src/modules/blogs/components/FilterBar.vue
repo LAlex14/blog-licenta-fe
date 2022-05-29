@@ -55,14 +55,14 @@
                       <div
                         v-for="(option, optionIdx) in section.options"
                         :key="option.value"
-                        class="flex items-center"
+                        class="flex items-center cursor-pointer"
                       >
                         <input
                           :id="`filter-mobile-${section.id}-${optionIdx}`"
                           :checked="isChecked(section.id, option.id)"
                           :name="`${section.id}`"
                           :value="option.id"
-                          class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                          class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                           type="checkbox"
                           @change="onChangeCheckbox"
                         />
@@ -88,7 +88,7 @@
       <div class="relative z-10 bg-white border-b border-gray-200 py-4 px-4 sm:px-6 lg:hidden">
         <div class="flex-1 flex items-center justify-center">
           <div class="max-w-sm w-full">
-            <label class="sr-only" for="search">Search</label>
+            <label class="sr-only">Search</label>
             <div class="relative">
               <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon aria-hidden="true" class="h-5 w-5 text-gray-400"/>
@@ -137,13 +137,13 @@
                     >
                       <form class="space-y-4">
                         <div v-for="(option, optionIdx) in section.options" :key="option.id"
-                             class="flex items-center">
+                             class="flex items-center cursor-pointer">
                           <input
                             :id="`filter-${section.id}-${optionIdx}`"
                             :checked="isChecked(section.id, option.id)"
                             :name="`${section.id}`"
                             :value="option.id"
-                            class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                            class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500 cursor-pointer"
                             type="checkbox"
                             @change="onChangeCheckbox"
                           />
@@ -164,7 +164,7 @@
 
           <div class="flex sm:flex-grow flex-row-reverse items-center">
             <div class="hidden lg:block max-w-sm w-full ml-4">
-              <label class="sr-only" for="search">Search</label>
+              <label class="sr-only">Search</label>
               <div class="relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <SearchIcon aria-hidden="true" class="h-5 w-5 text-gray-400"/>

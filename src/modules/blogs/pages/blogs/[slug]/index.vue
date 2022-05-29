@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-white bg-opacity-60 shadow px-4 py-5 sm:px-6 rounded-lg">
     <img
       v-if="blogImage"
       :alt="$t('blog cover image')"
@@ -25,7 +25,6 @@
       <BaseButton
         v-if="hidePrivateBlog"
         :label="$t('Read more')"
-        variant="primary"
         @click="showAuthModal = true"
       />
     </div>
@@ -44,11 +43,29 @@
       <span> &middot; {{ blog.likes_count + ' ' + $t('likes') }} </span>
     </div>
   </div>
+  <div class="mt-8">
+    <CommentCreate
+      :blog-id="blog.id"
+      class="mb-4"
+    />
+    <div
+      v-if="blog?.comments.length"
+      class="space-y-4"
+    >
+      <CommentView
+        v-for="comment in [].concat(blog.comments).reverse()"
+        :key="comment.id"
+        :comment="comment"
+      />
+    </div>
+  </div>
   <AuthModal v-model="showAuthModal"/>
 </template>
 
 <script setup>
-import AuthModal from "@/components/AuthModal.vue";</script>
+import AuthModal from "@/components/AuthModal.vue";
+import CommentView from "@/modules/blogs/components/CommentView.vue";
+import CommentCreate from "@/modules/blogs/components/CommentCreate.vue";</script>
 
 <script>
 const dateOptions = {
@@ -68,7 +85,6 @@ export default {
   },
   data() {
     return {
-      blog: '',
       showAuthModal: false
     }
   },
@@ -92,18 +108,12 @@ export default {
       let date = new Date(this.blog.created_at);
       return date.toLocaleDateString(this.$t('locales'), dateOptions);
     },
-    blogs() {
-      return this.$store.getters['blogs/blogs'];
-    }
-  },
-  methods: {
-    async getBlog() {
-      this.blog = this.blogs.find(blog => blog.slug === this.slug)
-      await this.$store.dispatch('blogs/addViewOnBlog', this.blog.id);
+    blog() {
+      return this.$store.getters['blogs/blogBySlug'](this.slug);
     }
   },
   async created() {
-    await this.getBlog();
+    await this.$store.dispatch('blogs/addViewOnBlog', this.blog.id);
   }
 }
 </script>

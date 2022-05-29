@@ -40,7 +40,6 @@
           block
           class="my-6"
           type="submit"
-          variant="primary"
         />
       </BaseForm>
 

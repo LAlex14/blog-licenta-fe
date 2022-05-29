@@ -3,7 +3,7 @@
     <div class="flex-shrink-0">
       <img :src="blogImage" alt="" class="h-48 w-full object-cover rounded-t-lg"/>
     </div>
-    <div class="flex-1 p-6 bg-white hover:bg-gray-100 bg-opacity-40 hover:bg-opacity-40 flex flex-col justify-between">
+    <div class="flex-1 p-6 bg-white bg-opacity-80 hover:bg-opacity-40 flex flex-col justify-between">
       <div class="flex-1">
         <div class="flex justify-between items-center">
           <router-link :to="blogsByCategory" class="inline-block">
@@ -73,11 +73,7 @@ import {BookmarkIcon as PinnedIcon} from '@heroicons/vue/solid'
 import {BookmarkIcon as UnpinnedIcon} from '@heroicons/vue/outline'</script>
 
 <script>
-import {STORAGE_URL} from "@/modules/common/utils/linkUtils";
-import BlogsService from "@/modules/blogs/services/BlogsService.js";
-
-const defaultImageUrl = 'https://images.assetsdelivery.com/compings_v2/yehorlisnyi/yehorlisnyi2104/yehorlisnyi210400016.jpg';
-const defaultUserAvatar = 'https://www.weact.org/wp-content/uploads/2016/10/Blank-profile.png';
+import {STORAGE_URL, DEFAULT_USER_AVATAR, DEFAULT_BLOG_IMAGE} from "@/modules/common/utils/linkUtils";
 
 export default {
   name: "BlogCard",
@@ -92,14 +88,14 @@ export default {
       return this.$store.state.auth.isLoggedIn;
     },
     blogImage() {
-      return this.blog?.public_image || this.blog?.image || defaultImageUrl;
+      return this.blog?.public_image || this.blog?.image || DEFAULT_BLOG_IMAGE;
     },
     blogCreatorAvatar() {
       const avatar = this.blog?.creator.avatar;
       if (avatar) {
         return avatar.includes('http') ? avatar : STORAGE_URL + avatar;
       }
-      return defaultUserAvatar;
+      return DEFAULT_USER_AVATAR;
     },
     blogsByCategory() {
       return `/blogs?category_id=${this.blog.category.id}`;

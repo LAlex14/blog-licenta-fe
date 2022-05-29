@@ -15,7 +15,7 @@ export default {
   },
 
   async getBlogs(params) {
-    const {data} = await axios.get('/restify/blogs?related=category,creator', {params: commonParams(params)});
+    const {data} = await axios.get('/restify/blogs?related=category,creator,comments', {params: commonParams(params)});
     data.forEach((blog, index) => {
       data[index] = {
         id: blog.id,
@@ -27,10 +27,40 @@ export default {
         creator: {
           ...blog.relationships.creator.attributes,
           id: blog.relationships.creator.id
-        }
+        },
+        comments: [
+          ...blog.relationships.comments.map(el => {
+            return {
+              ...el.attributes,
+              id: el.id
+            }
+          })
+        ]
       }
     })
     return data;
+  },
+
+  async saveComment(commentId, text) {
+    const {data} = await axios.put('/restify/comments/' + commentId, {
+      text
+    });
+    return {
+      ...data.attributes,
+      id: data.id
+    }
+  },
+
+  async postComment(params) {
+    const {data} = await axios.post('/restify/comments', params);
+    return {
+      ...data.attributes,
+      id: data.id
+    }
+  },
+
+  async deleteComment(commentId) {
+    await axios.delete('/restify/comments/' + commentId);
   },
 
   async getCategories(params) {
