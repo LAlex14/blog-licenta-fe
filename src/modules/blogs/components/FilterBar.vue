@@ -15,7 +15,7 @@
                            leave="transition ease-in-out duration-300 transform" leave-from="translate-x-0"
                            leave-to="translate-x-full">
             <DialogPanel
-              class="ml-auto pt-20 relative max-w-xs w-full h-full bg-white shadow-xl py-4 pb-12 flex flex-col overflow-y-auto">
+              class="ml-auto py-10 relative max-w-xs w-full h-full bg-white shadow-xl flex flex-col overflow-y-auto">
               <div class="px-4 flex items-center justify-between">
                 <h2 class="text-lg font-medium text-gray-900">Filters</h2>
                 <button class="-mr-2 w-10 h-10 bg-white p-2 rounded-md flex items-center justify-center text-gray-400"
@@ -35,9 +35,15 @@
                       class="px-2 py-3 bg-white w-full flex items-center justify-between text-sm text-gray-400"
                       @click="showModal"
                     >
-                      <span class="font-medium text-gray-900">
+                      <div class="flex">
+                        <span class="font-medium text-gray-900">
                         {{ section.name }}
                       </span>
+                        <span
+                          class="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums">
+                      {{ filter[section.id].length }}
+                    </span>
+                      </div>
                       <span class="ml-6 flex items-center">
                         <ChevronDownIcon :class="[open ? '-rotate-180' : 'rotate-0', 'h-5 w-5 transform']"
                                          aria-hidden="true"/>
@@ -46,13 +52,24 @@
                   </h3>
                   <DisclosurePanel v-if="isLoggedIn" class="pt-6">
                     <div class="space-y-6">
-                      <div v-for="(option, optionIdx) in section.options" :key="option.value" class="flex items-center">
-                        <input :id="`filter-mobile-${section.id}-${optionIdx}`" :checked="option.checked"
-                               :name="`${section.id}[]`" :value="option.value"
-                               class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
-                               type="checkbox"/>
-                        <label :for="`filter-mobile-${section.id}-${optionIdx}`" class="ml-3 text-sm text-gray-500">
-                          {{ option.label }}
+                      <div
+                        v-for="(option, optionIdx) in section.options"
+                        :key="option.value"
+                        class="flex items-center"
+                      >
+                        <input
+                          :id="`filter-mobile-${section.id}-${optionIdx}`"
+                          :checked="isChecked(section.id, option.id)"
+                          :name="`${section.id}`"
+                          :value="option.id"
+                          class="h-4 w-4 border-gray-300 rounded text-indigo-600 focus:ring-indigo-500"
+                          type="checkbox"
+                          @change="onChangeCheckbox"
+                        />
+                        <label
+                          :for="`filter-mobile-${section.id}-${optionIdx}`"
+                          class="ml-3 text-sm text-gray-500">
+                          {{ option.name || `${option.first_name} ${option.last_name}` }}
                         </label>
                       </div>
                     </div>
@@ -77,7 +94,7 @@
                 <SearchIcon aria-hidden="true" class="h-5 w-5 text-gray-400"/>
               </div>
               <input
-                id="search"
+                v-model="filter.searchValue"
                 class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                 name="search"
                 placeholder="Search" type="search"/>
@@ -101,8 +118,7 @@
                   >
                     <span>{{ section.name }}</span>
                     <span
-                      class="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums"
-                    >
+                      class="ml-1.5 rounded py-0.5 px-1.5 bg-gray-200 text-xs font-semibold text-gray-700 tabular-nums">
                       {{ filter[section.id].length }}
                     </span>
                     <ChevronDownIcon aria-hidden="true"
@@ -154,24 +170,28 @@
                   <SearchIcon aria-hidden="true" class="h-5 w-5 text-gray-400"/>
                 </div>
                 <input
-                  id="search"
+                  v-model="filter.searchValue"
                   class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   name="search"
-                  placeholder="Search" type="search"/>
+                  placeholder="Search"
+                  type="search"
+                />
               </div>
             </div>
 
-            <Menu as="div" class="relative inline-block text-left flex-shrink-0 pr-4">
-              <div>
-                <MenuButton
-                  class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900"
-                  @click="showModal"
-                >
-                  Sort by
-                  <ChevronDownIcon aria-hidden="true"
-                                   class="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"/>
-                </MenuButton>
-              </div>
+            <Menu
+              as="div"
+              class="relative inline-block text-left flex-shrink-0 pr-4"
+            >
+              <MenuButton
+                class="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900 flex"
+                @click="showModal"
+              >
+                {{ sortOptions.find(option => option.prop === filter.sort_by).name || $t('Sort by') }}
+                <ChevronDownIcon
+                  aria-hidden="true"
+                  class="flex-shrink-0 -mr-1 ml-1 h-5 w-5 text-gray-400 group-hover:text-gray-500"/>
+              </MenuButton>
 
               <transition enter-active-class="transition ease-out duration-100"
                           enter-from-class="transform opacity-0 scale-95"
@@ -184,17 +204,38 @@
                   class="origin-top-left absolute left-0 sm:left-auto sm:right-0 mt-2 w-40 rounded-md shadow-2xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                 >
                   <div class="py-1">
-                    <MenuItem v-for="option in searchOptions" :key="option.name" v-slot="{ active }">
-                      <router-link
-                        :class="[option.current ? 'font-medium text-gray-900' : 'text-gray-500', active ? 'bg-gray-100' : '', 'block px-4 py-2 text-sm']"
-                        :to="option.href">
+                    <MenuItem
+                      v-for="option in sortOptions"
+                      :key="option.prop"
+                    >
+                      <div
+                        :class="{
+                          'font-medium text-gray-900': isActiveSort(option.prop),
+                          'text-gray-500': !isActiveSort(option.prop),
+                        }"
+                        class="block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
+                        @click="onChangeSort(option.prop)"
+                      >
                         {{ option.name }}
-                      </router-link>
+                      </div>
                     </MenuItem>
                   </div>
                 </MenuItems>
               </transition>
             </Menu>
+            <div
+              class="flex cursor-pointer mr-4 -space-x-1"
+              @click="switchOrder"
+            >
+              <ArrowDownIcon
+                :class="!$route.query.order ? 'text-gray-700' : 'text-gray-400'"
+                class="w-4"
+              />
+              <ArrowUpIcon
+                :class="$route.query.order ? 'text-gray-700' : 'text-gray-400'"
+                class="w-4"
+              />
+            </div>
           </div>
           <button class="inline-block text-sm font-medium text-gray-700 hover:text-gray-900 sm:hidden" type="button"
                   @click="openFilters">Filters
@@ -208,7 +249,7 @@
 
 <script setup>
 import {ChevronDownIcon, SearchIcon} from '@heroicons/vue/solid'
-import {XIcon} from '@heroicons/vue/outline'
+import {ArrowDownIcon, ArrowUpIcon, XIcon,} from '@heroicons/vue/outline'
 import AuthModal from "@/components/AuthModal.vue";
 import {
   Dialog,
@@ -226,14 +267,7 @@ import {
   PopoverPanel,
   TransitionChild,
   TransitionRoot,
-} from '@headlessui/vue'
-
-const searchOptions = [
-  {name: 'Most Popular', href: '#', current: true},
-  {name: 'Best Rating', href: '#', current: false},
-  {name: 'Newest', href: '#', current: false},
-]
-</script>
+} from '@headlessui/vue'</script>
 
 <script>
 export default {
@@ -243,13 +277,24 @@ export default {
       open: false,
       filter: {
         user_id: [],
-        category_id: []
+        category_id: [],
+        searchValue: undefined,
+        sort_by: undefined,
+        order: undefined,
       }
     }
   },
   computed: {
     isLoggedIn() {
       return this.$store.state.auth.isLoggedIn;
+    },
+    sortOptions() {
+      return [
+        {name: 'Newest', prop: undefined},
+        {name: 'Views', prop: 'views'},
+        {name: 'Readings', prop: 'readings'},
+        {name: 'Likes', prop: 'likes_count'},
+      ]
     },
     categories() {
       return {
@@ -283,7 +328,10 @@ export default {
         }
         this.filter = {
           user_id: [],
-          category_id: []
+          category_id: [],
+          searchValue: undefined,
+          sort_by: undefined,
+          order: undefined,
         }
       }
     },
@@ -295,6 +343,9 @@ export default {
             ...this.$route.query,
             user_id: val['user_id'].length ? val['user_id'].join(',') : undefined,
             category_id: val['category_id'].length ? val['category_id'].join(',') : undefined,
+            search: val['searchValue'],
+            sort_by: val['sort_by'],
+            order: val['order']?.length ? val['order'] : undefined,
           }
         })
       }
@@ -312,6 +363,24 @@ export default {
       } else {
         const elIndex = this.filter[filter_option].findIndex(el => el === filter_value);
         this.filter[filter_option].splice(elIndex, 1);
+      }
+    },
+    onChangeSort(sort_by) {
+      if (sort_by === this.filter.sort_by) {
+        this.filter.sort_by = '';
+      } else {
+        this.filter.sort_by = sort_by;
+      }
+    },
+    isActiveSort(sort_by) {
+      return this.filter.sort_by === sort_by;
+    },
+    switchOrder() {
+      const order = this.$route.query.order;
+      if (!order) {
+        this.filter.order = 'asc';
+      } else {
+        this.filter.order = undefined;
       }
     },
     showModal() {
