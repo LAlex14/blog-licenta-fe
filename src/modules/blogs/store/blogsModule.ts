@@ -3,6 +3,17 @@ import BlogsService from "@/modules/blogs/services/BlogsService.js";
 import {ActionTree, GetterTree, Module, MutationTree} from "vuex";
 import store, {RootState} from "@/store";
 import cloneDeep from 'lodash-es/cloneDeep';
+import {colors} from "@/modules/common/utils/colorsUtils";
+
+const colorsCopy = cloneDeep(colors);
+export const categoryColorsClass = {}
+
+function getColorClasses() {
+  const randomIndex = Math.floor(Math.random() * colorsCopy.length);
+  const color = colorsCopy[randomIndex];
+  colorsCopy.splice(randomIndex, 1);
+  return `bg-${color}-100 text-${color}-800`;
+}
 
 export type State = {
   blogs: [];
@@ -10,6 +21,7 @@ export type State = {
   categories: [];
   authors: [];
   pinnedBlogs: [];
+  categoryColorsClass: {};
 }
 
 export const state = (): State => ({
@@ -17,7 +29,8 @@ export const state = (): State => ({
   publicBlogs: [],
   categories: [],
   authors: [],
-  pinnedBlogs: []
+  pinnedBlogs: [],
+  categoryColorsClass: categoryColorsClass,
 })
 
 const mutations: MutationTree<State> = {
@@ -62,14 +75,22 @@ const actions: ActionTree<State, RootState> = {
   },
 
 
-  async getCategories({commit}, params) {
+  async getCategories({commit, dispatch}, params) {
     try {
       const categories = await BlogsService.getCategories(params);
       commit('setCategories', categories);
+      dispatch('initCategoryColors');
     } catch (err) {
       throw err
     }
   },
+
+  initCategoryColors({state}) {
+    state.categories.forEach((category) => {
+      state.categoryColorsClass[category.id] = getColorClasses(category.name);
+    });
+  },
+
   async getAuthors({commit}, params) {
     try {
       const authors = await BlogsService.getAuthors(params);
@@ -166,6 +187,7 @@ const getters: GetterTree<State, RootState> = {
   authors: state => state.authors,
   authorById: state => authorId => state.authors.find(author => author['id'] === String(authorId)),
   blogBySlug: state => slug => state.blogs.find(blog => blog['slug'] === slug),
+  categoryColorsClass: state => state.categoryColorsClass,
 }
 
 const module: Module<State, RootState> = {

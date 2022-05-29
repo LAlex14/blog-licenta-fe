@@ -8,10 +8,8 @@
         <div class="flex justify-between items-center">
           <router-link :to="blogsByCategory" class="inline-block">
                 <span
-                  :class="[
-                    randomColor(), 
-                    'inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium'
-                  ]"
+                  :class="categoryColorClasses"
+                  class="px-3 py-0.5 rounded-full text-sm font-medium"
                 >
                   {{ blog.category?.name }}
                 </span>
@@ -68,7 +66,6 @@
 </template>
 
 <script setup>
-import {randomColor} from "@/modules/common/utils/colorsUtils";
 import {BookmarkIcon as PinnedIcon} from '@heroicons/vue/solid'
 import {BookmarkIcon as UnpinnedIcon} from '@heroicons/vue/outline'</script>
 
@@ -99,6 +96,9 @@ export default {
     },
     blogsByCategory() {
       return `/blogs?category_id=${this.blog.category.id}`;
+    },
+    categoryColorClasses() {
+      return this.$store.state.blogs.categoryColorsClass[this.blog.category_id] || '';
     },
     blogCreatorLink() {
       return `/blogs/authors/${this.blog.creator.id}`

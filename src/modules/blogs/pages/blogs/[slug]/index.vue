@@ -6,11 +6,14 @@
       :src="blogImage"
       class="object-cover mx-auto mb-5 rounded-lg max-h-80"
     />
-    <div class="text-lg">
-      <span class="block text-base text-center text-indigo-600 font-semibold tracking-wide uppercase">
+    <div class="text-lg text-center">
+      <span
+        :class="categoryColorClasses"
+        class="px-3 py-1 rounded-full text-base text-center text-indigo-600 font-semibold tracking-wide uppercase"
+      >
         {{ blog?.category?.name }}
       </span>
-      <span class="mt-2 block text-3xl text-center leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+      <span class="mt-2 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           {{ blog?.title }}
       </span>
     </div>
@@ -97,6 +100,9 @@ export default {
     },
     blogImage() {
       return this.blog?.public_image || this.blog?.image;
+    },
+    categoryColorClasses() {
+      return this.$store.state.blogs.categoryColorsClass[this.blog.category_id] || '';
     },
     authorFullName() {
       return `${this.blog?.creator?.first_name} ${this.blog?.creator?.last_name}`

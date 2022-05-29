@@ -3,13 +3,10 @@
     <div class="max-w-7xl mx-auto ">
       <div class="flex justify-between h-16">
         <div class="flex px-2 lg:px-0">
-          <router-link
-            class="flex-shrink-0 flex items-center"
-            to="/blogs"
-          >
+          <div class="flex-shrink-0 flex items-center">
             <img alt="Workflow" class="h-8 w-auto"
                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"/>
-          </router-link>
+          </div>
           <div class="hidden lg:ml-6 lg:flex lg:space-x-8">
             <div
               v-for="page in pages"
@@ -38,15 +35,24 @@
           class="hidden lg:flex lg:gap-4 lg:items-center"
         >
           <router-link
+            v-if="$route.name !== 'ViewBlog' && $route.name !== 'EditBlog' && $route.name !== 'CreateBlog'"
             class="flex-shrink-0"
             to="/blogs/create"
           >
-            <button
-              class="relative inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              type="button">
-              <PlusSmIcon aria-hidden="true" class="-ml-1 mr-1 h-5 w-5"/>
-              <span>New Blog</span>
-            </button>
+            <BaseButton size="xs">
+              <PlusSmIcon aria-hidden="true" class="-ml-1 mr-2 h-5 w-5"/>
+              <span>{{ $t('New Blog') }}</span>
+            </BaseButton>
+          </router-link>
+          <router-link
+            v-if="$route.name === 'ViewBlog'"
+            :to="$route.path + '/edit'"
+            class="flex-shrink-0"
+          >
+            <BaseButton size="sm">
+              <PencilAltIcon aria-hidden="true" class="-ml-1 mr-2 h-4 w-4"/>
+              <span>{{ $t('Edit') }}</span>
+            </BaseButton>
           </router-link>
           <!-- Profile dropdown -->
           <Menu as="div" class="relative flex-shrink-0">
@@ -167,7 +173,7 @@
 
 <script setup>
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
-import {PlusSmIcon} from '@heroicons/vue/solid'
+import {PencilAltIcon, PlusSmIcon} from '@heroicons/vue/solid'
 import {MenuIcon, XIcon} from '@heroicons/vue/outline'
 import AuthModal from "@/components/AuthModal.vue";
 
@@ -225,6 +231,9 @@ export default {
       this.$store.dispatch('auth/logout')
     },
     goToPage(page) {
+      if (this.$route.path === page.to) {
+        return;
+      }
       if (!this.isLoggedIn && (page.name === 'Saved' || page.name === 'Authors')) {
         this.showAuthModal = true;
         return;
@@ -232,5 +241,8 @@ export default {
       this.$router.push(page.to)
     }
   },
+  created() {
+    console.log(this.$route.name)
+  }
 }
 </script>
