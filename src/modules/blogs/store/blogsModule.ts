@@ -5,10 +5,13 @@ import store, {RootState} from "@/store";
 import cloneDeep from 'lodash-es/cloneDeep';
 import {colors} from "@/modules/common/utils/colorsUtils";
 
-const colorsCopy = cloneDeep(colors);
+let colorsCopy = [];
 export const categoryColorsClass = {}
 
 function getColorClasses() {
+  if (!colorsCopy.length) {
+    colorsCopy = cloneDeep(colors);
+  }
   const randomIndex = Math.floor(Math.random() * colorsCopy.length);
   const color = colorsCopy[randomIndex];
   colorsCopy.splice(randomIndex, 1);
@@ -74,6 +77,18 @@ const actions: ActionTree<State, RootState> = {
     }
   },
 
+  async deleteBlog({commit, state}, blogId) {
+    try {
+      await BlogsService.deleteBlog(blogId);
+      const blogIndex = state.blogs.findIndex((item) => item.id === blogId);
+      if (blogIndex === -1) {
+        return
+      }
+      state.blogs.splice(blogIndex, 1);
+    } catch (err) {
+      throw err
+    }
+  },
 
   async getCategories({commit, dispatch}, params) {
     try {
@@ -186,7 +201,10 @@ const getters: GetterTree<State, RootState> = {
   categories: state => state.categories,
   authors: state => state.authors,
   authorById: state => authorId => state.authors.find(author => author['id'] === String(authorId)),
-  blogBySlug: state => slug => state.blogs.find(blog => blog['slug'] === slug),
+  blogBySlug: state => slug => {
+    const blogs = store.state.auth.isLoggedIn ? state.blogs : state.publicBlogs;
+    return blogs.find(blog => blog['slug'] === slug);
+  },
   categoryColorsClass: state => state.categoryColorsClass,
 }
 

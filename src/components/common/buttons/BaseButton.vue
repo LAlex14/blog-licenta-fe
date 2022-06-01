@@ -1,18 +1,15 @@
 <template>
   <div
-    :class="{
+    :class="[customClass, {
            'block w-full': block,
-           'inline-flex': !block,
            'shadow-sm': !variant.includes('link'),
-           [customClass]: customClass
-           }"
-    class="relative"
+           }]"
   >
     <button
       ref="button"
       :class="{
               'text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500': variant === 'primary',
-              'text-white bg-gray-400 hover:bg-gray-500 focus:ring-gray-500': variant === 'secondary',
+              'text-gray-700 bg-gray-200 hover:bg-gray-400 hover:text-white focus:ring-gray-500': variant === 'secondary',
               'text-white bg-red-500 hover:bg-red-700 focus:ring-red-500': variant === 'danger',
               'text-xs px-2.5 py-1.5 leading-4': size === 'xs',
               'text-sm px-4 py-2 leading-4': size === 'sm',

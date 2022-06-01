@@ -1,10 +1,14 @@
 <template>
-  <Listbox v-model="selected" as="div">
-    <ListboxLabel class="block text-sm font-medium text-gray-700"> Assigned to</ListboxLabel>
+  <Listbox
+    :modelValue="modelValue"
+    as="div"
+    @update:modelValue="(value) => {$emit('update:modelValue', value)}"
+  >
+    <ListboxLabel class="block text-sm font-medium text-gray-700">{{ label }}</ListboxLabel>
     <div class="mt-1 relative">
       <ListboxButton
         class="bg-white relative w-full border border-gray-300 rounded-md shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-        <span class="block truncate">{{ selected.name }}</span>
+        <span class="block truncate">{{ modelValue?.name || '' }}</span>
         <span class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
           <SelectorIcon aria-hidden="true" class="h-5 w-5 text-gray-400"/>
         </span>
@@ -14,12 +18,16 @@
                   leave-to-class="opacity-0">
         <ListboxOptions
           class="absolute z-10 mt-1 w-full bg-white shadow-lg max-h-60 rounded-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-sm">
-          <ListboxOption v-for="person in people" :key="person.id" v-slot="{ active, selected }" :value="person"
-                         as="template">
+          <ListboxOption
+            v-for="option in options" :key="option.id"
+            v-slot="{ active, selected }"
+            :value="option"
+            as="template"
+          >
             <li
               :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'cursor-default select-none relative py-2 pl-3 pr-9']">
               <span :class="[selected ? 'font-semibold' : 'font-normal', 'block truncate']">
-                {{ person.name }}
+                {{ option.name }}
               </span>
 
               <span v-if="selected"
@@ -34,30 +42,38 @@
   </Listbox>
 </template>
 
-<script setup>
-import {ref} from 'vue'
+<script>
 import {Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions} from '@headlessui/vue'
 import {CheckIcon, SelectorIcon} from '@heroicons/vue/solid'
 
-const people = [
-  {id: 1, name: 'Wade Cooper'},
-  {id: 2, name: 'Arlene Mccoy'},
-  {id: 3, name: 'Devon Webb'},
-  {id: 4, name: 'Tom Cook'},
-  {id: 5, name: 'Tanya Fox'},
-  {id: 6, name: 'Hellen Schmidt'},
-  {id: 7, name: 'Caroline Schultz'},
-  {id: 8, name: 'Mason Heaney'},
-  {id: 9, name: 'Claudie Smitham'},
-  {id: 10, name: 'Emil Schaefer'},
-]
-
-const selected = ref(people[3])
-</script>
-
-<script>
 export default {
-  name: "BaseSelect"
+  name: "BaseSelect",
+  components: {Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions, CheckIcon, SelectorIcon},
+  emits: ['update:modelValue'],
+  props: {
+    label: {
+      type: String,
+      default: '',
+    },
+    options: {
+      required: true,
+    },
+    modelValue: {
+      required: true,
+    },
+    required: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  setup(props, {emit}) {
+    if (!props.required) {
+      return
+    }
+    if (!props.modelValue || !Object.keys(props.modelValue).length) {
+      emit('update:modelValue', props.options[0])
+    }
+  },
 }
 </script>
 

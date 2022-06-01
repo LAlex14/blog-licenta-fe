@@ -32,21 +32,27 @@
       />
     </div>
     <div class="mt-7 sm:flex justify-between text-sm font-medium text-gray-600">
-      <router-link
-        :to="`/blogs/authors/${this.blog.creator.id}`"
+      <button
         class="text-indigo-500"
+        @click="goToAuthorPage"
       >
         @{{ authorFullName }}
-      </router-link>
+      </button>
       <div>{{ $t('Posted on:') }} {{ createdDate }}</div>
     </div>
-    <div class="flex space-x-1 text-sm text-gray-500">
-      <span>{{ blog.views + ' ' + $t('views') }}</span>
-      <span> &middot; {{ blog.readings + ' ' + $t('readings') }} </span>
-      <span> &middot; {{ blog.likes_count + ' ' + $t('likes') }} </span>
+    <div
+      v-if="isLoggedIn"
+      class="flex space-x-1 text-sm text-gray-500"
+    >
+      <span>{{ (blog.views || 0) + ' ' + $t('views') }}</span>
+      <span> &middot; {{ (blog.readings || 0) + ' ' + $t('readings') }} </span>
+      <span> &middot; {{ (blog.likes_count || 0) + ' ' + $t('likes') }} </span>
     </div>
   </div>
-  <div class="mt-8">
+  <div
+    v-if="isLoggedIn"
+    class="mt-8"
+  >
     <CommentCreate
       :blog-id="blog.id"
       class="mb-4"
@@ -102,7 +108,7 @@ export default {
       return this.blog?.public_image || this.blog?.image;
     },
     categoryColorClasses() {
-      return this.$store.state.blogs.categoryColorsClass[this.blog.category_id] || '';
+      return this.$store.state.blogs.categoryColorsClass[this.blog?.category_id] || '';
     },
     authorFullName() {
       return `${this.blog?.creator?.first_name} ${this.blog?.creator?.last_name}`
@@ -118,8 +124,19 @@ export default {
       return this.$store.getters['blogs/blogBySlug'](this.slug);
     }
   },
+  methods: {
+    goToAuthorPage() {
+      if (this.isLoggedIn) {
+        this.$router.push(`/blogs/authors/${this.blog.creator.id}`);
+        return
+      }
+      this.showAuthModal = true;
+    }
+  },
   async created() {
-    await this.$store.dispatch('blogs/addViewOnBlog', this.blog.id);
+    if (this.isLoggedIn) {
+      await this.$store.dispatch('blogs/addViewOnBlog', this.blog.id);
+    }
   }
 }
 </script>

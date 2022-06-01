@@ -11,6 +11,9 @@ module.exports = {
       colors: {},
       inset: {
         18: '4.5rem',
+      },
+      padding: {
+        '1.75': '0.4375rem',
       }
     },
   },

@@ -1,10 +1,22 @@
 import axios from 'axios';
+import {toBase64} from "@/modules/common/utils/imageUtils";
 
 function commonParams(params = {}) {
   return {
     ...params,
     perPage: 9999,
   }
+}
+
+async function blogToSend(blog) {
+  blog.category_id = blog.category.id;
+  delete blog.category;
+  blog.private = blog.private ? 1 : 0;
+  console.log(blog)
+  if (typeof blog.image !== 'string') {
+    blog.image = await toBase64(blog.image);
+  }
+  return blog;
 }
 
 export default {
@@ -39,6 +51,35 @@ export default {
       }
     })
     return data;
+  },
+
+  async createBlog(blog) {
+    blog = await blogToSend(blog);
+    console.log(blog)
+    try {
+      const {data} = await axios.post(`/restify/blogs/`, blog);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async editBlog(blog, blogId) {
+    blog = await blogToSend(blog);
+    try {
+      const {data} = await axios.post(`/restify/blogs/${blogId}`, blog);
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async deleteBlog(blogId) {
+    try {
+      await axios.delete(`/restify/blogs/${blogId}`);
+    } catch (error) {
+      throw error;
+    }
   },
 
   async saveComment(commentId, text) {

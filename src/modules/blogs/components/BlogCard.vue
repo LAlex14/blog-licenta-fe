@@ -55,9 +55,9 @@
             <time :datetime="blog.created_at">
               {{ createdAt }}
             </time>
-            <span> &middot; {{ blog.views + ' ' + $t('views') }}</span>
-            <span> &middot; {{ blog.readings + ' ' + $t('readings') }} </span>
-            <span v-if="isLoggedIn"> &middot; {{ blog.likes_count + ' ' + $t('likes') }} </span>
+            <span> &middot; {{ (blog.views || 0) + ' ' + $t('views') }}</span>
+            <span> &middot; {{ (blog.readings || 0) + ' ' + $t('readings') }} </span>
+            <span v-if="isLoggedIn"> &middot; {{ (blog.likes_count || 0) + ' ' + $t('likes') }} </span>
           </div>
         </div>
       </div>

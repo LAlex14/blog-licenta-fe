@@ -2,6 +2,7 @@ import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios'
 import {API_URL} from "@/modules/common/config";
 import {notifications, NotificationType, notify} from "@/components/common/NotificationPlugin";
 import {isForbidden, isInternalServerError, isUnauthorized, mapErrors} from "@/modules/common/utils/requestUtils";
+import AuthService from "@/modules/auth/services/AuthService";
 
 export const statusCodesToHandle = [400, 401, 422];
 const TOKEN_KEY = 'token'
@@ -50,7 +51,8 @@ export async function errorInterceptor(error: CustomAxiosError) {
   if (statusCodesToHandle.includes(status)) {
     errors = mapErrors(error.response.data);
     if (errors === 'Unauthenticated.') {
-      errors = 'Your session expired. Please login in again to use the application'
+      errors = 'Your session expired. Please login in again to use the application';
+      await AuthService.resetData()
     }
     if (notifications.state.length === 0) {
       notify({

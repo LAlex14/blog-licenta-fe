@@ -45,7 +45,7 @@
             </BaseButton>
           </router-link>
           <router-link
-            v-if="$route.name === 'ViewBlog'"
+            v-if="$route.name === 'ViewBlog' && isAuthor"
             :to="$route.path + '/edit'"
             class="flex-shrink-0"
           >
@@ -54,6 +54,15 @@
               <span>{{ $t('Edit') }}</span>
             </BaseButton>
           </router-link>
+          <BaseButton
+            v-if="$route.name === 'EditBlog'"
+            size="sm"
+            variant="danger"
+            @click="deleteBlog"
+          >
+            <TrashIcon aria-hidden="true" class="-ml-1 mr-2 h-4 w-4"/>
+            <span>{{ $t('Delete') }}</span>
+          </BaseButton>
           <!-- Profile dropdown -->
           <Menu as="div" class="relative flex-shrink-0">
             <div>
@@ -173,7 +182,7 @@
 
 <script setup>
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
-import {PencilAltIcon, PlusSmIcon} from '@heroicons/vue/solid'
+import {PencilAltIcon, PlusSmIcon, TrashIcon} from '@heroicons/vue/solid'
 import {MenuIcon, XIcon} from '@heroicons/vue/outline'
 import AuthModal from "@/components/AuthModal.vue";
 
@@ -224,6 +233,12 @@ export default {
     },
     currentRouteName() {
       return this.$route.name;
+    },
+    blog() {
+      return this.$store.getters['blogs/blogBySlug'](this.$route.params.slug)
+    },
+    isAuthor() {
+      return String(this.$store.state.auth.user.id) === String(this.blog.creator.id)
     }
   },
   methods: {
@@ -239,7 +254,13 @@ export default {
         return;
       }
       this.$router.push(page.to)
-    }
+    },
+    async deleteBlog() {
+      const {id} = this.blog;
+      await this.$store.dispatch('blogs/deleteBlog', id);
+      this.$success('Blog deleted successfully');
+      await this.$router.push('/blogs');
+    },
   },
   created() {
     console.log(this.$route.name)
