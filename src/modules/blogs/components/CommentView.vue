@@ -122,7 +122,7 @@ export default {
       return DEFAULT_USER_AVATAR;
     },
     isAuthor() {
-      return String(this.author.id) === String(this.$store.state.auth.user.id);
+      return String(this.author.id) === String(this.$user.id);
     }
   },
   data() {

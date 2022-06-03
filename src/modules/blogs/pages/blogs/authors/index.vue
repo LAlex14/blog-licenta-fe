@@ -8,7 +8,18 @@
       :key="author.id"
       class="rounded-lg shadow h-full flex flex-col">
       <div class="flex-shrink-0">
-        <img :src="author.avatar" alt="" class="h-48 w-full object-cover rounded-t-lg"/>
+        <img
+          v-if="author.avatar"
+          :src="author.avatar"
+          alt=""
+          class="h-48 w-full object-cover rounded-t-lg"
+        />
+        <div
+          v-else
+          class="bg-indigo-600 rounded-t-lg flex items-center justify-center"
+        >
+          <UserCircleIcon class="h-48 text-gray-50"/>
+        </div>
       </div>
       <router-link
         :to="authorLink(author.id)"
@@ -65,6 +76,9 @@
     </li>
   </ul>
 </template>
+
+<script setup>
+import {UserCircleIcon} from '@heroicons/vue/solid';</script>
 
 <script>
 export default {

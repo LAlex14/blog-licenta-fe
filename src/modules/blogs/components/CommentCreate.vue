@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {DEFAULT_USER_AVATAR, STORAGE_URL} from "@/modules/common/utils/linkUtils";
+import {DEFAULT_USER_AVATAR} from "@/modules/common/utils/linkUtils";
 
 export default {
   name: "CommentCreate",
@@ -49,15 +49,8 @@ export default {
     }
   },
   computed: {
-    user() {
-      return this.$store.state.auth.user;
-    },
     userAvatar() {
-      const avatar = this.user?.avatar;
-      if (avatar) {
-        return avatar.includes('http') ? avatar : STORAGE_URL + avatar;
-      }
-      return DEFAULT_USER_AVATAR;
+      return this.$user.avatar || DEFAULT_USER_AVATAR;
     },
   },
   data() {

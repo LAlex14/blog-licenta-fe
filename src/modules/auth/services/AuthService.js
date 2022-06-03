@@ -15,12 +15,12 @@ export default {
   },
 
   async getProfile() {
-    let result = await axios.get('/profile');
+    let result = await axios.get('/restify/profile');
     return result.data;
   },
 
   async updateProfile(data) {
-    return axios.post(`/profile`, data);
+    return axios.put(`/restify/profile`, data);
   },
 
   async register(data) {

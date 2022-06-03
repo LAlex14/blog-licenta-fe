@@ -45,13 +45,16 @@
             </BaseButton>
           </router-link>
           <router-link
-            v-if="$route.name === 'ViewBlog' && isAuthor"
+            v-if="showEditButton"
             :to="$route.path + '/edit'"
             class="flex-shrink-0"
           >
-            <BaseButton size="sm">
+            <BaseButton
+              size="sm"
+              variant="secondary"
+            >
               <PencilAltIcon aria-hidden="true" class="-ml-1 mr-2 h-4 w-4"/>
-              <span>{{ $t('Edit') }}</span>
+              <span>{{ editButtonLabel }}</span>
             </BaseButton>
           </router-link>
           <BaseButton
@@ -69,9 +72,16 @@
               <MenuButton
                 class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <span class="sr-only">{{ $t('Open user menu') }}</span>
-                <img alt=""
-                     class="h-8 w-8 rounded-full"
-                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"/>
+                <img
+                  v-if="$user.avatar"
+                  :src="$user.avatar"
+                  alt=""
+                  class="h-8 w-8 rounded-full"
+                />
+                <UserCircleIcon
+                  v-else
+                  class="h-10 w-10 rounded-full text-indigo-600"
+                />
               </MenuButton>
             </div>
             <transition enter-active-class="transition ease-out duration-100"
@@ -82,12 +92,12 @@
               <MenuItems
                 class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                 <MenuItem>
-                  <router-link
+                  <div
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                    to="#"
+                    @click="goToProfilePage"
                   >
                     {{ $t('Profile') }}
-                  </router-link>
+                  </div>
                 </MenuItem>
                 <MenuItem>
                   <div
@@ -149,12 +159,12 @@
           </div>
         </div>
         <div class="space-y-1">
-          <router-link
+          <div
             class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
-            to="#"
+            @click="goToProfilePage"
           >
             {{ $t('Profile') }}
-          </router-link>
+          </div>
           <div
             class="block px-4 py-2 text-base font-medium text-gray-500 hover:text-gray-800 hover:bg-gray-100"
             @click="logout"
@@ -182,7 +192,7 @@
 
 <script setup>
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
-import {PencilAltIcon, PlusSmIcon, TrashIcon} from '@heroicons/vue/solid'
+import {PencilAltIcon, PlusSmIcon, TrashIcon, UserCircleIcon} from '@heroicons/vue/solid'
 import {MenuIcon, XIcon} from '@heroicons/vue/outline'
 import AuthModal from "@/components/AuthModal.vue";
 
@@ -238,7 +248,14 @@ export default {
       return this.$store.getters['blogs/blogBySlug'](this.$route.params.slug)
     },
     isAuthor() {
-      return String(this.$store.state.auth.user.id) === String(this.blog.creator.id)
+      return String(this.$user.id) === String(this.blog.creator.id)
+    },
+    showEditButton() {
+      return (this.$route.name === 'ViewBlog' && this.isAuthor) ||
+        (this.$route.name === 'ViewAuthor' && String(this.$route.params.id) === String(this.$user.id))
+    },
+    editButtonLabel() {
+      return this.$route.name === 'ViewBlog' ? 'Edit Blog' : 'Edit Profile'
     }
   },
   methods: {
@@ -254,6 +271,9 @@ export default {
         return;
       }
       this.$router.push(page.to)
+    },
+    goToProfilePage() {
+      this.$router.push(`/blogs/authors/${this.$user.id}`)
     },
     async deleteBlog() {
       const {id} = this.blog;

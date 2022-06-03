@@ -88,11 +88,7 @@ export default {
       return this.blog?.public_image || this.blog?.image || DEFAULT_BLOG_IMAGE;
     },
     blogCreatorAvatar() {
-      const avatar = this.blog?.creator.avatar;
-      if (avatar) {
-        return avatar.includes('http') ? avatar : STORAGE_URL + avatar;
-      }
-      return DEFAULT_USER_AVATAR;
+      return this.blog?.creator.avatar || DEFAULT_USER_AVATAR;
     },
     blogsByCategory() {
       return `/blogs?category_id=${this.blog.category.id}`;
@@ -111,7 +107,7 @@ export default {
       return event.toLocaleDateString('ro-RO')
     },
     userId() {
-      return this.$store.state.auth.user.id;
+      return this.$user.id;
     }
   },
   methods: {

@@ -41,7 +41,6 @@ const actions: ActionTree<State, RootState> = {
       await AuthService.register(data)
     } catch (err) {
       throw err
-      throw err
     }
   },
   async getProfile({commit}) {

@@ -21,7 +21,7 @@ export default {
   },
   computed: {
     isAuthor() {
-      return String(this.$store.state.auth.user.id) === String(this.blog.creator.id)
+      return String(this.$user.id) === String(this.blog.creator.id)
     }
   },
   methods: {

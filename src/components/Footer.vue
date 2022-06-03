@@ -10,7 +10,7 @@
         </router-link>
       </div>
       <div class="mt-4 md:mt-0 md:order-1">
-        <p class="text-center text-sm text-gray-400">&copy; 2020 Workflow, Inc. All rights reserved.</p>
+        <p class="text-center text-sm text-gray-400">&copy; 2022 Leșan Alexandru. All rights reserved.</p>
       </div>
     </div>
   </footer>

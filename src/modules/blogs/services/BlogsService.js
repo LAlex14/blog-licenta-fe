@@ -1,5 +1,4 @@
 import axios from 'axios';
-import {toBase64} from "@/modules/common/utils/imageUtils";
 
 function commonParams(params = {}) {
   return {
@@ -12,10 +11,6 @@ async function blogToSend(blog) {
   blog.category_id = blog.category.id;
   delete blog.category;
   blog.private = blog.private ? 1 : 0;
-  console.log(blog)
-  if (typeof blog.image !== 'string') {
-    blog.image = await toBase64(blog.image);
-  }
   return blog;
 }
 

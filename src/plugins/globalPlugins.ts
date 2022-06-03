@@ -1,4 +1,4 @@
-import { App } from "vue";
+import {App} from "vue";
 import copyToClipboard from "@/plugins/copyToClipboard";
 import NotificationsPlugin from "@/components/common/NotificationPlugin";
 import dateFormatPlugin from "@/plugins/dateFormatPlugin";
@@ -10,5 +10,12 @@ export default {
     Vue.use(dateFormatPlugin)
     Vue.use(veeValidate)
     Vue.use(NotificationsPlugin)
+    Vue.mixin({
+      computed: {
+        $user() {
+          return this.$store.state.auth?.user || {}
+        },
+      }
+    })
   }
 }
