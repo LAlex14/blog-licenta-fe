@@ -9,7 +9,6 @@
                 <BaseInput
                   v-model="blog.title"
                   :label="$t('Title')"
-                  class="w-full"
                 />
               </div>
             </div>

@@ -30,7 +30,7 @@
         <BaseButton
           :label="$t('Save')"
           size="sm"
-          @click="saveComment"
+          @click="editComment"
         />
       </div>
       <div
@@ -115,11 +115,7 @@ export default {
       return this.$store.getters['blogs/authorById'](this.comment.user_id);
     },
     authorAvatar() {
-      const avatar = this?.author?.avatar;
-      if (avatar) {
-        return avatar.includes('http') ? avatar : STORAGE_URL + avatar;
-      }
-      return DEFAULT_USER_AVATAR;
+      return this?.author?.avatar || DEFAULT_USER_AVATAR;
     },
     isAuthor() {
       return String(this.author.id) === String(this.$user.id);
@@ -143,7 +139,7 @@ export default {
       this.editMode = false;
       this.commentText = '';
     },
-    async saveComment() {
+    async editComment() {
       try {
         await this.$store.dispatch('blogs/updateComment', {
           commentId: this.comment.id,

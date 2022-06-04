@@ -116,7 +116,6 @@ export default {
         blogId: this.blog.id,
         users: [`${this.userId}`],
       })
-
     }
   }
 }

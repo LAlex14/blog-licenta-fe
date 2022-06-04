@@ -9,75 +9,139 @@
 
     </div>
 
-    <div class="mt-6 grid grid-cols-1 gap-y-4 gap-x-10 sm:grid-cols-2">
-      <BaseInput
-        v-model="form.first_name"
-        :label="$t('First name')"
-        class="w-full"
-      />
+    <BaseForm
+      v-slot="{ meta }"
+      @submit="updateProfile"
+    >
+      <div class="mt-6 grid grid-cols-1 gap-y-4 gap-x-10 sm:grid-cols-2">
+        <BaseInput
+          v-model="form.first_name"
+          :label="$t('First name')"
+          rules="required"
+        />
 
-      <BaseInput
-        v-model="form.last_name"
-        :label="$t('Last name')"
-        class="w-full"
-      />
+        <BaseInput
+          v-model="form.last_name"
+          :label="$t('Last name')"
+          rules="required"
+        />
 
-      <BaseInput
-        v-model="form.email"
-        :label="$t('Email')"
-        class="w-full"
-      />
+        <BaseInput
+          v-model="form.email"
+          :label="$t('Email')"
+          rules="required|email"
+        />
 
-      <BaseInput
-        v-model="form.job_title"
-        :label="$t('Job title')"
-        class="w-full"
-      />
+        <BaseInput
+          v-model="form.job_title"
+          :label="$t('Job title')"
+        />
 
-      <BaseInput
-        v-model="form.twitter_link"
-        :label="$t('Twitter link')"
-        class="w-full"
-      />
+        <BaseInput
+          v-model="form.twitter_link"
+          :label="$t('Twitter link')"
+          rules="url"
+        />
 
-      <BaseInput
-        v-model="form.linkedin_link"
-        :label="$t('Linkedin link')"
-        class="w-full"
-      />
+        <BaseInput
+          v-model="form.linkedin_link"
+          :label="$t('Linkedin link')"
+          rules="url"
+        />
 
-      <BaseImageUpload v-model="form.avatar"/>
+        <BaseImageUpload v-model="form.avatar"/>
 
-      <div class="h-full flex flex-col">
-        <label class="block text-sm font-medium text-gray-700" for="about"> About </label>
-        <div class="mt-1 flex flex-grow">
+        <div class="h-full flex flex-col">
+          <label class="block text-sm font-medium text-gray-700" for="about"> About </label>
+          <div class="mt-1 flex flex-grow">
               <textarea
                 id="about"
                 v-model="form.description"
                 class="flex-grow shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border border-gray-300 rounded-md"
                 name="about"
               />
+          </div>
+          <p class="mt-1 text-sm text-gray-500">{{ $t('Write a few sentences about yourself.') }}</p>
         </div>
-        <p class="mt-1 text-sm text-gray-500">Write a few sentences about yourself.</p>
       </div>
-    </div>
-  </div>
 
-  <div class="mt-5 flex justify-end space-x-4">
-    <BaseButton
-      :label="$t('Cancel')"
-      variant="secondary"
-      @click="$router.go(-1)"
-    />
-    <BaseButton
-      :label="$t('Save')"
-      @click="updateProfile"
-    />
+      <div class="mt-5 flex justify-between">
+        <BaseButton
+          :class="{ 'hidden': showChangePass }"
+          :label="$t('Change Password')"
+          type="button"
+          variant="secondary"
+          @click="switchChangePass(true)"
+        />
+        <div class="flex space-x-4">
+          <BaseButton
+            :label="$t('Cancel')"
+            type="button"
+            variant="secondary"
+            @click="$router.go(-1)"
+          />
+          <BaseButton
+            :disabled="!meta.valid"
+            :label="$t('Update')"
+            type="sumbit"
+          />
+        </div>
+      </div>
+    </BaseForm>
+
+    <BaseForm
+      v-if="showChangePass"
+      v-slot="{ meta }"
+      class="mt-5"
+      @submit="changePassword"
+    >
+      <div class="mt-6 grid grid-cols-1 gap-y-4 gap-x-10 md:grid-cols-3">
+        <BaseInput
+          v-model="passwordForm.current_password"
+          :label="$t('Current Password')"
+          name="old password"
+          rules="required"
+          type="password"
+        />
+
+        <BaseInput
+          v-model="passwordForm.password"
+          :label="$t('New password')"
+          :placeholder="$t('Password')"
+          name="password"
+          rules="required"
+          type="password"
+        />
+
+        <BaseInput
+          v-model="passwordForm.password_confirmation"
+          :label="$t('Confirm new password')"
+          :placeholder="$t('Password')"
+          name="password confirmation"
+          rules="required|confirmed:@password"
+          type="password"
+        />
+      </div>
+
+      <div class="mt-5 flex justify-end space-x-4">
+        <BaseButton
+          :label="$t('Cancel')"
+          type="button"
+          variant="secondary"
+          @click="switchChangePass(false)"
+        />
+        <BaseButton
+          :disabled="!meta.valid"
+          :label="$t('Change')"
+        />
+      </div>
+    </BaseForm>
   </div>
 </template>
 
 <script>
 import BaseImageUpload from "@/modules/blogs/components/BaseImageUpload.vue";
+import AuthService from "@/modules/auth/services/AuthService";
 
 export default {
   name: "edit",
@@ -100,10 +164,33 @@ export default {
         description: "",
         twitter_link: "",
         linkedin_link: "",
+      },
+      showChangePass: false,
+      passwordForm: {
+        current_password: '',
+        password: '',
+        password_confirmation: ''
       }
     }
   },
   methods: {
+    async changePassword() {
+      try {
+        await AuthService.changePassword(this.passwordForm);
+        this.$success('Password changed successfully');
+        this.switchChangePass(false);
+      } catch (error) {
+        throw error
+      }
+    },
+    switchChangePass(value) {
+      this.showChangePass = value;
+      this.passwordForm = {
+        current_password: '',
+        password: '',
+        password_confirmation: ''
+      }
+    },
     initiateUser() {
       if (String(this.$user.id) !== String(this.id)) {
         this.$router.push('/blogs/authors');
@@ -132,6 +219,7 @@ export default {
   },
   created() {
     this.initiateUser();
+    this.switchChangePass(false);
   }
 }
 </script>

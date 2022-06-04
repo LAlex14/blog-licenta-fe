@@ -7,12 +7,16 @@
       class="object-cover mx-auto mb-5 rounded-lg max-h-80"
     />
     <div class="text-lg text-center">
-      <span
-        :class="categoryColorClasses"
-        class="px-3 py-1 rounded-full text-base text-center text-indigo-600 font-semibold tracking-wide uppercase"
-      >
+      <div class="flex justify-between items-center">
+        <div class="w-14"/>
+        <span
+          :class="categoryColorClasses"
+          class="px-3 py-1 rounded-full text-base text-center text-indigo-600 font-semibold tracking-wide uppercase"
+        >
         {{ blog?.category?.name }}
-      </span>
+        </span>
+        <LikeBlog class="justify-self-end"/>
+      </div>
       <span class="mt-2 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           {{ blog?.title }}
       </span>
@@ -74,7 +78,8 @@
 <script setup>
 import AuthModal from "@/components/AuthModal.vue";
 import CommentView from "@/modules/blogs/components/CommentView.vue";
-import CommentCreate from "@/modules/blogs/components/CommentCreate.vue";</script>
+import CommentCreate from "@/modules/blogs/components/CommentCreate.vue";
+import LikeBlog from "@/modules/blogs/components/LikeBlog.vue";</script>
 
 <script>
 const dateOptions = {

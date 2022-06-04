@@ -77,7 +77,7 @@ export default {
     }
   },
 
-  async saveComment(commentId, text) {
+  async editComment(commentId, text) {
     const {data} = await axios.put('/restify/comments/' + commentId, {
       text
     });
@@ -129,6 +129,15 @@ export default {
   async unpinBlog(blogId, users) {
     const {data} = await axios.post(`/restify/blogs/${blogId}/detach/users`, {users});
     return data;
+  },
+
+  async likeBlog(blogId, value) {
+    const {data} = await axios.post(`/restify/blogs/${blogId}/actions?action=like`, {value});
+    return data;
+  },
+
+  async deleteLike(likeId) {
+    await axios.delete(`/restify/likes/${likeId}`);
   },
 
   async addViewOnBlog(blogId) {

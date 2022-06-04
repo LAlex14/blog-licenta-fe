@@ -43,7 +43,7 @@ export default {
   },
 
   async changePassword(data) {
-    return axios.post('/users/actions?action=change-password', data);
+    return axios.post('/restify/change-password', data);
   },
 
   async resetPassword(data) {

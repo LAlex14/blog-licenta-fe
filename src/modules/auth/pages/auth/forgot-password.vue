@@ -55,9 +55,10 @@ export default defineComponent({
     async onFormSubmit() {
       try {
         const {data} = await AuthService.forgotPassword(this.model);
-        if (!data.message) {
+        if (data.message) {
           this.$success(data?.message);
         }
+        await this.$router.push('/auth/login');
       } catch (e) {
         console.warn(e)
       }

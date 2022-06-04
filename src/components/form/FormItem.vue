@@ -1,19 +1,19 @@
 <template>
   <div
-    class="my-3"
     :class="[{
       'has-error': errorMessage,
       'flex items-center leading-3': $attrs.type === 'checkbox'
     }, otherClasses]"
+    class="my-3 w-full"
   >
     <label
-      class="block text-sm font-medium text-gray-700"
       v-if="(label || $slots.label) && $attrs.type !== 'checkbox'"
       :for="String($attrs.id)"
+      class="block text-sm font-medium text-gray-700"
     >
       <slot name="label">
         {{ label }}
-        <span class="text-gray-500" v-if="isRequiredField">
+        <span v-if="isRequiredField" class="text-gray-500">
           *
         </span>
       </slot>
@@ -36,14 +36,14 @@
     </div>
 
     <label
-      class="ml-2 block text-sm font-medium text-gray-900 hover:cursor-pointer"
       v-if="(label || $slots.label) && $attrs.type === 'checkbox'"
       :for="String($attrs.id)"
+      class="ml-2 block text-sm font-medium text-gray-900 hover:cursor-pointer"
       @click="$emit('click-checkbox')"
     >
       <slot name="label">
         {{ label }}
-        <span class="text-gray-500" v-if="isRequiredField">
+        <span v-if="isRequiredField" class="text-gray-500">
           *
         </span>
       </slot>

@@ -128,6 +128,29 @@ const actions: ActionTree<State, RootState> = {
       throw err
     }
   },
+
+  async likeBlog({state, commit}, params) {
+    try {
+      const {blogId, value} = params;
+      const data = await BlogsService.likeBlog(blogId, value);
+      const blog = state.blogs.find(blog => blog['id'] === blogId);
+      blog.is_liked = {...data};
+    } catch (err) {
+      throw err
+    }
+  },
+
+  async deleteLike({state}, params) {
+    try {
+      const {blogId, likeId} = params;
+      await BlogsService.deleteLike(likeId);
+      const blog = state.blogs.find(blog => blog['id'] === blogId);
+      blog.is_liked = null;
+    } catch (err) {
+      throw err
+    }
+  },
+
   async addViewOnBlog({state}, blogId) {
     try {
       await BlogsService.addViewOnBlog(blogId);
@@ -153,7 +176,7 @@ const actions: ActionTree<State, RootState> = {
   async updateComment({state, dispatch}, params) {
     try {
       const {commentId, text} = params;
-      const comment = await BlogsService.saveComment(commentId, text);
+      const comment = await BlogsService.editComment(commentId, text);
       await dispatch('updateBlogComments', {
         comment,
         action: 'update'
