@@ -56,8 +56,12 @@
               {{ createdAt }}
             </time>
             <span> &middot; {{ (blog.views || 0) + ' ' + $t('views') }}</span>
-            <span> &middot; {{ (blog.readings || 0) + ' ' + $t('readings') }} </span>
             <span v-if="isLoggedIn"> &middot; {{ (blog.likes_count || 0) + ' ' + $t('likes') }} </span>
+          </div>
+          <div class="flex flex-wrap space-x-1 text-sm text-gray-500">
+            <span>{{ (blog.readings || 0) + ' ' + $t('readings') }}</span>
+            <span> &middot; </span>
+            <ReadingTime :content="blog.content"/>
           </div>
         </div>
       </div>
@@ -67,10 +71,11 @@
 
 <script setup>
 import {BookmarkIcon as PinnedIcon} from '@heroicons/vue/solid'
-import {BookmarkIcon as UnpinnedIcon} from '@heroicons/vue/outline'</script>
+import {BookmarkIcon as UnpinnedIcon} from '@heroicons/vue/outline'
+import ReadingTime from '@/modules/blogs/components/ReadingTime.vue'</script>
 
 <script>
-import {STORAGE_URL, DEFAULT_USER_AVATAR, DEFAULT_BLOG_IMAGE} from "@/modules/common/utils/linkUtils";
+import {DEFAULT_USER_AVATAR, DEFAULT_BLOG_IMAGE} from "@/modules/common/utils/linkUtils";
 
 export default {
   name: "BlogCard",

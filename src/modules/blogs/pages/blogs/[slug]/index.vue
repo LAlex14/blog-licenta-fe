@@ -49,8 +49,8 @@
       class="flex space-x-1 text-sm text-gray-500"
     >
       <span>{{ (blog.views || 0) + ' ' + $t('views') }}</span>
-      <span> &middot; {{ (blog.readings || 0) + ' ' + $t('readings') }} </span>
       <span> &middot; {{ (blog.likes_count || 0) + ' ' + $t('likes') }} </span>
+      <span> &middot; {{ (blog.readings || 0) + ' ' + $t('readings') }} </span>
     </div>
   </div>
   <div

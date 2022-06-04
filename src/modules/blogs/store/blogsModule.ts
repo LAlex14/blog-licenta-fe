@@ -6,7 +6,6 @@ import cloneDeep from 'lodash-es/cloneDeep';
 import {colors} from "@/modules/common/utils/colorsUtils";
 
 let colorsCopy = [];
-export const categoryColorsClass = {}
 
 function getColorClasses() {
   if (!colorsCopy.length) {
@@ -33,7 +32,7 @@ export const state = (): State => ({
   categories: [],
   authors: [],
   pinnedBlogs: [],
-  categoryColorsClass: categoryColorsClass,
+  categoryColorsClass: {},
 })
 
 const mutations: MutationTree<State> = {
