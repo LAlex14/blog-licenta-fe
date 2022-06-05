@@ -1,9 +1,6 @@
-:root {
-
-}
-
 @tailwind base;
 @tailwind components;
+@import "tinymce-overrides";
 
 @layer components {
   .form-input {

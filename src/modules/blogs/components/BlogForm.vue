@@ -1,14 +1,28 @@
 <template>
   <div class="relative">
+    <div class="fixed top-20 right-8 p-3 bg-white bg-opacity-40 z-50 rounded-lg shadow-lg">
+      <div class="flex justify-end space-x-4">
+        <BaseButton
+          :label="$t('Cancel')"
+          variant="secondary"
+          @click="$router.go(-1)"
+        />
+        <BaseButton
+          :label="$t('Save')"
+          @click="$emit('submit')"
+        />
+      </div>
+    </div>
     <form class="space-y-8 divide-y divide-gray-200">
       <div class="space-y-8 divide-y divide-gray-200">
         <div>
           <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 items-center">
             <div class="sm:col-span-4">
-              <div class="mt-1">
+              <div class="mt-2">
                 <BaseInput
                   v-model="blog.title"
                   :label="$t('Title')"
+                  class="mt-1"
                 />
               </div>
             </div>
@@ -48,30 +62,17 @@
           <div class="pt-6">
             <label class="block text-sm font-medium text-gray-700" htmlFor="comment">{{ $t('Content') }}</label>
             <div class="mt-1">
-            <textarea
-              id="comment"
-              v-model="blog.content"
-              class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              name="comment"
-              rows="10"
-            />
+              <HtmlEditor
+                ref="tinymce-editor"
+                v-model="blog.content"
+                :inline="false"
+                :title="blog.title"
+                @save="$emit('submit')"
+              />
             </div>
           </div>
 
         </div>
-      </div>
-
-
-      <div class="mt-5 flex justify-end space-x-4">
-        <BaseButton
-          :label="$t('Cancel')"
-          variant="secondary"
-          @click="$router.go(-1)"
-        />
-        <BaseButton
-          :label="$t('Save')"
-          @click="$emit('submit')"
-        />
       </div>
     </form>
   </div>
@@ -80,6 +81,7 @@
 <script>
 import BaseSelect from "@/components/form/BaseSelect.vue";
 import BaseImageUpload from "@/modules/blogs/components/BaseImageUpload.vue";
+import HtmlEditor from "@/modules/blogs/components/HtmlEditor.vue";
 import {computed} from "vue";
 
 export default {
@@ -87,6 +89,7 @@ export default {
   components: {
     BaseSelect,
     BaseImageUpload,
+    HtmlEditor,
   },
   emits: ['update:modelValue'],
   props: {

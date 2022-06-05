@@ -1,7 +1,5 @@
 <template>
-  <span
-    class="reading-time"
-  >
+  <span class="reading-time">
     {{ time }} {{ $t('minutes_read', time) }}
   </span>
 </template>
@@ -21,13 +19,8 @@ export default {
     },
   },
   computed: {
-    innerTextFromHtml() {
-      return this.extractContent(this.content);
-    },
     time() {
-      return this.innerTextFromHtml
-        ? Math.ceil(this.innerTextFromHtml.split(/\s/g).length / this.WORDS_PER_MINUTE)
-        : 0;
+      return Math.ceil(this.extractContent(this.content).split(/\s/g).length / this.WORDS_PER_MINUTE) || 0;
     },
   },
   methods: {

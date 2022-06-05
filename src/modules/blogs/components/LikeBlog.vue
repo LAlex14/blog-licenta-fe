@@ -54,7 +54,7 @@ export default {
     deleteLike() {
       this.$store.dispatch('blogs/deleteLike', {
         blogId: this.blog.id,
-        likeId: this.blogLike.id,
+        like: this.blogLike,
       });
     }
   }

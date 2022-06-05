@@ -134,6 +134,7 @@ const actions: ActionTree<State, RootState> = {
       const data = await BlogsService.likeBlog(blogId, value);
       const blog = state.blogs.find(blog => blog['id'] === blogId);
       blog.is_liked = {...data};
+      blog.likes_count += value;
     } catch (err) {
       throw err
     }
@@ -141,10 +142,11 @@ const actions: ActionTree<State, RootState> = {
 
   async deleteLike({state}, params) {
     try {
-      const {blogId, likeId} = params;
-      await BlogsService.deleteLike(likeId);
+      const {blogId, like} = params;
+      await BlogsService.deleteLike(like.id);
       const blog = state.blogs.find(blog => blog['id'] === blogId);
       blog.is_liked = null;
+      blog.likes_count -= like.value;
     } catch (err) {
       throw err
     }
@@ -155,6 +157,16 @@ const actions: ActionTree<State, RootState> = {
       await BlogsService.addViewOnBlog(blogId);
       const blog = state.blogs.find(blog => blog['id'] === blogId);
       blog['views']++;
+    } catch (err) {
+      throw err
+    }
+  },
+
+  async addReadingOnBlog({state}, blogId) {
+    try {
+      await BlogsService.addReadingOnBlog(blogId);
+      const blog = state.blogs.find(blog => blog['id'] === blogId);
+      blog['readings']++;
     } catch (err) {
       throw err
     }

@@ -55,6 +55,7 @@
         <div class="flex space-x-4">
           <BaseButton
             :label="$t('Change')"
+            variant="secondary"
             @click.stop="$refs.imageInput.click()"
           />
           <BaseButton

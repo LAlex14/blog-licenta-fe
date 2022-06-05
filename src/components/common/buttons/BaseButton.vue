@@ -27,7 +27,7 @@
     >
         <span v-if="loading"
               class="absolute flex w-full items-center justify-center">
-            <LoadingIcon :size="size"/>
+            <BaseLoading :size="size"/>
         </span>
 
       <span
@@ -42,7 +42,7 @@
   </div>
 </template>
 <script lang="ts">
-import LoadingIcon from "@/components/common/buttons/LoadingIcon.vue";
+import BaseLoading from "@/components/common/buttons/BaseLoading.vue";
 import {defineComponent, PropType} from "vue";
 
 type ButtonType = "button" | "submit" | "reset" | undefined
@@ -50,7 +50,7 @@ type ButtonType = "button" | "submit" | "reset" | undefined
 export default defineComponent({
   inheritAttrs: false,
   components: {
-    LoadingIcon,
+    BaseLoading,
   },
   props: {
     block: {

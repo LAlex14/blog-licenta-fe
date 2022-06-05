@@ -99,7 +99,8 @@ export default {
   },
   data() {
     return {
-      showAuthModal: false
+      showAuthModal: false,
+      WORDS_PER_MINUTE: 250,
     }
   },
   computed: {
@@ -127,7 +128,10 @@ export default {
     },
     blog() {
       return this.$store.getters['blogs/blogBySlug'](this.slug);
-    }
+    },
+    readingTime() {
+      return (this.extractContent(this.blog.content).split(/\s/g).length / this.WORDS_PER_MINUTE) || 0;
+    },
   },
   methods: {
     goToAuthorPage() {
@@ -136,11 +140,26 @@ export default {
         return
       }
       this.showAuthModal = true;
+    },
+    extractContent(s) {
+      let span = document.createElement('span');
+      span.innerHTML = s;
+      return span.textContent || span.innerText || '';
+    },
+    addReading() {
+      console.log(this.readingTime)
+      setTimeout(() => {
+        console.log('lala')
+        this.$store.dispatch('blogs/addReadingOnBlog', this.blog.id)
+      }, this.readingTime * 60 * 1000);
     }
   },
   async created() {
     if (this.isLoggedIn) {
       await this.$store.dispatch('blogs/addViewOnBlog', this.blog.id);
+      if (this.readingTime) {
+        this.addReading();
+      }
     }
   }
 }
