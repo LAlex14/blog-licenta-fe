@@ -7,15 +7,26 @@
       class="object-cover mx-auto mb-5 rounded-lg max-h-80"
     />
     <div class="text-lg text-center">
-      <div class="flex justify-between items-center">
-        <div class="w-14"/>
+      <div
+        :class="{
+          'justify-center': !isLoggedIn,
+          'justify-between': isLoggedIn,
+        }"
+        class="flex items-center"
+      >
+        <div
+          v-if="isLoggedIn"
+          class="w-14"/>
         <span
           :class="categoryColorClasses"
           class="px-3 py-1 rounded-full text-base text-center text-indigo-600 font-semibold tracking-wide uppercase"
         >
         {{ blog?.category?.name }}
         </span>
-        <LikeBlog class="justify-self-end"/>
+        <LikeBlog
+          v-if="isLoggedIn"
+          class="justify-self-end"
+        />
       </div>
       <span class="mt-2 block text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
           {{ blog?.title }}
@@ -25,7 +36,7 @@
       :class="{
         'blog-private': hidePrivateBlog
       }"
-      class="mt-6 prose-indigo prose-lg text-gray-500"
+      class="mt-6 prose-lg text-gray-500"
       v-html="blog?.content"
     />
     <div class="flex justify-center mt-2 mb-8">
@@ -147,7 +158,6 @@ export default {
       return span.textContent || span.innerText || '';
     },
     addReading() {
-      console.log(this.readingTime)
       setTimeout(() => {
         console.log('lala')
         this.$store.dispatch('blogs/addReadingOnBlog', this.blog.id)

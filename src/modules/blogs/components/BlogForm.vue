@@ -1,19 +1,6 @@
 <template>
   <div class="relative">
-    <div class="fixed top-20 right-8 p-3 bg-white bg-opacity-40 z-50 rounded-lg shadow-lg">
-      <div class="flex justify-end space-x-4">
-        <BaseButton
-          :label="$t('Cancel')"
-          variant="secondary"
-          @click="$router.go(-1)"
-        />
-        <BaseButton
-          :label="$t('Save')"
-          @click="$emit('submit')"
-        />
-      </div>
-    </div>
-    <form class="space-y-8 divide-y divide-gray-200">
+    <form class="space-y-8">
       <div class="space-y-8 divide-y divide-gray-200">
         <div>
           <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 items-center">
@@ -73,6 +60,18 @@
           </div>
 
         </div>
+      </div>
+
+      <div class="mt-5 flex justify-end space-x-4">
+        <BaseButton
+          :label="$t('Cancel')"
+          variant="secondary"
+          @click="$router.go(-1)"
+        />
+        <BaseButton
+          :label="$t('Save')"
+          @click="$emit('submit')"
+        />
       </div>
     </form>
   </div>

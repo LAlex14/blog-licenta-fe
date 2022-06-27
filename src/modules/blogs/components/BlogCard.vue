@@ -34,7 +34,7 @@
             {{ blog.title }}
           </p>
           <p class="mt-3 text-base text-gray-500 truncate-content">
-            {{ blog.content }}
+            {{ textFromHtml }}
           </p>
         </router-link>
       </div>
@@ -99,7 +99,7 @@ export default {
       return `/blogs?category_id=${this.blog.category.id}`;
     },
     categoryColorClasses() {
-      return this.$store.state.blogs.categoryColorsClass[this.blog.category_id] || '';
+      return this.$store.state.blogs.categoryColorsClass[this.blog.category_id] || 'text-indigo-600 bg-indigo-100';
     },
     blogCreatorLink() {
       return `/blogs/authors/${this.blog.creator.id}`
@@ -113,6 +113,9 @@ export default {
     },
     userId() {
       return this.$user.id;
+    },
+    textFromHtml() {
+      return this.extractContent(this.blog.content);
     }
   },
   methods: {
@@ -121,7 +124,12 @@ export default {
         blogId: this.blog.id,
         users: [`${this.userId}`],
       })
-    }
+    },
+    extractContent(s) {
+      let span = document.createElement('span');
+      span.innerHTML = s;
+      return span.textContent || span.innerText || '';
+    },
   }
 }
 </script>

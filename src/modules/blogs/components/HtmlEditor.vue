@@ -49,13 +49,10 @@ export default {
   computed: {
     editorOptions() {
       return this.options || {
-        resize: false,
-        statusbar: false,
         content_css: '/assets/css/juice-editor.css',
         menubar: ' edit insert format tools',
-        toolbar_sticky: true,
-        toolbar_sticky_offset: 64,
         toolbar_mode: 'wrap',
+        max_height: 700,
         contextmenu: 'image',
         toolbar:
           'styleselect | bold italic underline | bullist numlist | alignleft aligncenter alignright | link codesample code | insertImageBtn',

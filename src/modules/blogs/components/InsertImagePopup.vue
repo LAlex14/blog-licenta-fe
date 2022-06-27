@@ -4,7 +4,7 @@
     v-model="modelValue"
   >
     <div>
-      <div class="self-start px-3.5 space-x-4 pt-2 text-grey-700 border pb-1">
+      <div class="self-start px-3.5 space-x-4 pt-2 text-grey-700 border-b pb-1">
         <span
           v-for="option in options"
           :key="option"

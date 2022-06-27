@@ -249,7 +249,7 @@
 
 <script setup>
 import {ChevronDownIcon, SearchIcon} from '@heroicons/vue/solid'
-import {ArrowDownIcon, ArrowUpIcon, XIcon,} from '@heroicons/vue/outline'
+import {ArrowDownIcon, ArrowUpIcon, XIcon} from '@heroicons/vue/outline'
 import AuthModal from "@/components/AuthModal.vue";
 import {
   Dialog,
@@ -290,7 +290,7 @@ export default {
     },
     sortOptions() {
       return [
-        {name: 'Newest', prop: undefined},
+        {name: 'Date', prop: undefined},
         {name: 'Views', prop: 'views'},
         {name: 'Readings', prop: 'readings'},
         {name: 'Likes', prop: 'likes_count'},
@@ -321,9 +321,9 @@ export default {
     }
   },
   watch: {
-    '$route.path': {
+    '$route': {
       handler(val, oldVal) {
-        if (val === oldVal) {
+        if (val.path === oldVal.path && Object.keys(val.query).length) {
           return
         }
         this.filter = {
@@ -376,6 +376,10 @@ export default {
       return this.filter.sort_by === sort_by;
     },
     switchOrder() {
+      if (!this.isLoggedIn) {
+        this.showAuthModal = true;
+        return;
+      }
       const order = this.$route.query.order;
       if (!order) {
         this.filter.order = 'asc';

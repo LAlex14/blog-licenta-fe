@@ -3,7 +3,7 @@ import {App} from "vue";
 import {Form as VeeForm} from 'vee-validate'
 
 const components = import.meta.globEager('../components/**/(Base|Icon)*.(vue|js)')
-const icons = import.meta.globEager('../assets/icons/(Icon)*.svg')
+const icons = import.meta.globEager('../assets/icons/(Icon)*.(vue|svg)')
 
 /**
  * This will require and make global all components starting with **Base** (e.g BaseButton, BaseInput etc) or **Icon** (e.g IconPhone)

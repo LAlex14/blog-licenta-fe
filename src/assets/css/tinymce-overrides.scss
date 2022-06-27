@@ -15,6 +15,10 @@
   background: #f8fafc !important;
 }
 
+.tox:not([dir=rtl]) .tox-statusbar__branding {
+  display: none;
+}
+
 .tox {
   .tox-mbtn__select-label {
     cursor: pointer !important;

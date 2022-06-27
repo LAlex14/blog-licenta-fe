@@ -2,7 +2,7 @@
   "name": "vue3-project",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host blog-licenta-fe.test",
     "build": "vue-tsc --noEmit && vite build",
     "typecheck": "vue-tsc --noEmit --skipLibCheck",
     "serve": "vite preview"

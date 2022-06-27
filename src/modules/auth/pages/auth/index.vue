@@ -81,8 +81,12 @@ export default defineComponent({
       const data = {
         token: this.$route.query.token
       }
-      await this.login(data);
-      this.$success(this.$t('Your account has been activated successfully'))
+      try {
+        await this.login(data);
+        this.$success(this.$t('Your account has been activated successfully'))
+      } catch (e) {
+        this.$error(this.$t('Invalid data'))
+      }
     }
   },
   mounted() {
@@ -96,5 +100,6 @@ export default defineComponent({
 name: 'Login'
 }
 </route>
+
 <style>
 </style>

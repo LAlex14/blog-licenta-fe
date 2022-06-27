@@ -3,11 +3,14 @@
     <div class="max-w-7xl mx-auto ">
       <div class="flex justify-between h-16">
         <div class="flex px-2 lg:px-0">
-          <div class="flex-shrink-0 flex items-center">
+          <router-link
+            class="flex-shrink-0 flex items-center"
+            to="/blogs"
+          >
             <img alt="Workflow" class="h-8 w-auto"
                  src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"/>
-          </div>
-          <div class="hidden lg:ml-6 lg:flex lg:space-x-8">
+          </router-link>
+          <div class="hidden md:ml-6 md:flex md:space-x-8">
             <div
               v-for="page in pages"
               :class="{
@@ -21,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div class="flex items-center lg:hidden">
+        <div class="flex items-center md:hidden">
           <!-- Mobile menu button -->
           <DisclosureButton
             class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -32,7 +35,7 @@
         </div>
         <div
           v-if="isLoggedIn"
-          class="hidden lg:flex lg:gap-4 lg:items-center"
+          class="hidden md:flex md:gap-4 md:items-center"
         >
           <router-link
             v-if="$route.name !== 'ViewBlog' && $route.name !== 'EditBlog' && $route.name !== 'CreateBlog'"
@@ -113,7 +116,7 @@
         </div>
         <div
           v-else
-          class="hidden lg:flex lg:gap-6 lg:items-center"
+          class="hidden md:flex md:gap-6 md:items-center"
         >
           <router-link
             v-for="page in authPages"
@@ -129,7 +132,7 @@
         </div>
       </div>
     </div>
-    <DisclosurePanel class="lg:hidden">
+    <DisclosurePanel class="md:hidden">
       <div class="py-2 space-y-1">
         <div
           v-for="page in pages"
@@ -282,8 +285,5 @@ export default {
       await this.$router.push('/blogs');
     },
   },
-  created() {
-    console.log(this.$route.name)
-  }
 }
 </script>

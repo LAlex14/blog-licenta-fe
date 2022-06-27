@@ -58,7 +58,7 @@ export default defineComponent({
         if (data.message) {
           this.$success(data?.message);
         }
-        await this.$router.push('/auth/login');
+        await this.$router.push('/auth');
       } catch (e) {
         console.warn(e)
       }
