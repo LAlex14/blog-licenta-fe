@@ -1,7 +1,7 @@
 <template>
-  <div class="notification-item"
-       :class="[{'alert-with-icon': icon}, verticalAlign, horizontalAlign, alertType]"
-       :style="customPosition">
+  <div :class="[{'alert-with-icon': icon}, verticalAlign, horizontalAlign, alertType]"
+       :style="customPosition"
+       class="notification-item">
     <transition
       appear
       appear-active-class="transform ease-out duration-300 transition"
@@ -16,45 +16,45 @@
              @click="tryClose">
           <div class="p-4">
             <div class="flex items-start">
-              <div class="h-6 w-6 flex justify-center items-center rounded-full"
-                   :class="{
+              <div :class="{
                     'bg-green-200': type === 'success',
                     'bg-blue-200': type === 'info',
                     'bg-red-200': type === 'error',
                     'bg-yellow-200': type === 'warning',
                  }"
+                   class="h-6 w-6 flex justify-center items-center rounded-full"
               >
-                <svg class="h-4 w-4"
-                     :class="{
+                <svg :class="{
                     'text-green-600': type === 'success',
                     'text-blue-600': type === 'info',
                     'text-red-600': type === 'error',
                     'text-yellow-600': type === 'warning',
                  }"
-                     stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                     class="h-4 w-4"
+                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path v-if="type === 'error' || type === 'warning'"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                  <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M5 13l4 4L19 7"></path>
+                        stroke-width="2"></path>
+                  <path v-else d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2"></path>
                 </svg>
               </div>
               <div class="ml-3 w-0 flex-1 pt-0.5">
                 <div v-if="message"
-                     v-html="message"
-                     class="text-sm leading-5 font-medium text-gray-900 dark:text-white">
+                     class="text-sm leading-5 font-medium text-gray-900 dark:text-white"
+                     v-html="message">
                 </div>
               </div>
               <div class="ml-4 flex-shrink-0 flex">
                 <button v-if="showClose"
                         class="inline-flex text-gray-400 dark:text-white focus:outline-none focus:text-gray-500 transition ease-in-out duration-150"
                         @click="tryClose">
-                  <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fill-rule="evenodd"
+                  <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path clip-rule="evenodd"
                           d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                          clip-rule="evenodd"/>
+                          fill-rule="evenodd"/>
                   </svg>
                 </button>
               </div>
@@ -66,8 +66,8 @@
   </div>
 </template>
 <script lang="ts">
-import { NotificationType } from './index'
-import { defineComponent, PropType } from "vue";
+import {NotificationType} from './index'
+import {defineComponent, PropType} from "vue";
 
 export default defineComponent({
   name: 'Notification',
@@ -134,7 +134,7 @@ export default defineComponent({
       return `notification-${this.type}`;
     },
     customPosition() {
-      let initialMargin = 20;
+      let initialMargin = 10 + 64;
       let alertHeight = this.elmHeight + 10;
       let sameAlertsCount = this.$notifications.state.filter(alert => {
         return (

@@ -3,9 +3,15 @@
     <slot>
 
     </slot>
-    <div class="min-h-error mb-1 mt-1">
+    <div
+      class="min-h-error my-0.5"
+      v-if="rules"
+    >
       <div>
-        <p :key="error" class="text-sm leading-none text-red-600">
+        <p
+          class="text-xs leading-none text-red-600"
+          :key="error"
+        >
           {{ error }}
         </p>
       </div>
@@ -13,7 +19,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 
 export default defineComponent({
   name: 'FormItemError',
@@ -21,6 +27,10 @@ export default defineComponent({
   props: {
     error: {
       type: String,
+      default: ''
+    },
+    rules: {
+      type: [String, Object],
       default: ''
     },
   },

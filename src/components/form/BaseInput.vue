@@ -1,6 +1,9 @@
 <template>
 
-  <FormItem v-bind="allAttributes">
+  <FormItem
+    v-bind="allAttributes"
+    @click-checkbox="$refs.input.click()"
+  >
     <!--Pass through all slots to FormItem-->
     <template v-for="(_, name) in $slots" v-slot:[name]="slotData">
       <slot :name="name" v-bind="slotData"/>
@@ -16,21 +19,21 @@
     >
       <slot>
         <input
-          v-bind="$attrs"
-          :value="inputValue"
-          :type="type"
-          :name="name || label"
+          ref="input"
           :class="{
             'form-input-error': errorMessage,
+            'form-input': type !== 'checkbox',
+            'checkbox-form-input': type === 'checkbox',
             'pl-8': $slots.prefix,
-            'bg-gray-100 dark:bg-gray-700 cursor-not-allowed': $attrs.disabled,
-            'dark:bg-gray-800': !$attrs.disabled && $attrs.readonly === undefined,
-            'cursor-not-allowed bg-gray-100 dark:bg-gray-700 focus:shadow-none focus:border-transparent': $attrs.readonly !== undefined,
+            'bg-gray-100 cursor-not-allowed': $attrs.disabled,
+            'cursor-not-allowed bg-gray-100 focus:shadow-none focus:border-transparent': $attrs.readonly !== undefined,
           }"
-          ref="input"
-          class="form-input"
-          @focus="onFocus"
+          :name="name || label"
+          :type="type"
+          :value="inputValue"
+          v-bind="$attrs"
           @blur="onBlur(handleBlur)"
+          @focus="onFocus"
           @input="onInput($event, handleChange)"
         />
       </slot>
@@ -39,7 +42,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from "vue";
 import FormItem from "@/components/form/FormItem.vue";
 
 export default defineComponent({
@@ -53,7 +56,7 @@ export default defineComponent({
       default: '',
     },
     modelValue: {
-      type: [String, Number],
+      type: [String, Number, Boolean],
       default: '',
     },
     type: {
@@ -100,7 +103,7 @@ export default defineComponent({
       this.$emit('update:modelValue', '')
     },
   }
-  
+
 })
 </script>
 

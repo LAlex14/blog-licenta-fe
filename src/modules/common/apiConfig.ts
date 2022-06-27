@@ -1,7 +1,8 @@
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios'
-import { API_URL } from "@/modules/common/config";
-import { notifications, NotificationType, notify } from "@/components/common/NotificationPlugin";
-import { isForbidden, isInternalServerError, isUnauthorized, mapErrors } from "@/modules/common/utils/requestUtils";
+import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from 'axios'
+import {API_URL} from "@/modules/common/config";
+import {notifications, NotificationType, notify} from "@/components/common/NotificationPlugin";
+import {isForbidden, isInternalServerError, isUnauthorized, mapErrors} from "@/modules/common/utils/requestUtils";
+import AuthService from "@/modules/auth/services/AuthService";
 
 export const statusCodesToHandle = [400, 401, 422];
 const TOKEN_KEY = 'token'
@@ -30,6 +31,7 @@ export function successInterceptor(response: AxiosResponse): AxiosResponse {
   return response.data;
 }
 
+// @ts-ignore
 interface CustomAxiosError extends AxiosError {
   handled: boolean,
   errors: any,
@@ -42,14 +44,15 @@ export async function errorInterceptor(error: CustomAxiosError) {
     return Promise.reject(error);
   }
 
-  const { status } = error.response;
+  const {status} = error.response;
   let errors = '';
 
 
   if (statusCodesToHandle.includes(status)) {
     errors = mapErrors(error.response.data);
     if (errors === 'Unauthenticated.') {
-      errors = 'Your session expired. Please login in again to use the application'
+      errors = 'Your session expired. Please login in again to use the application';
+      await AuthService.resetData()
     }
     if (notifications.state.length === 0) {
       notify({

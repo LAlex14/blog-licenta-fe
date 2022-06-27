@@ -1,18 +1,19 @@
 module.exports = {
   mode: 'jit',
-  purge: {
-    enable: true,
-    content: [
-      './index.html',
-      './src/**/*.{vue,js,ts,jsx,tsx}',
-      './safelist.txt'
-    ],
-  },
-  darkMode: false, // or 'media' or 'class'
+  content: [
+    './index.html',
+    './src/**/*.{vue,js,ts,jsx,tsx}',
+    './safelist.txt'
+  ],
+  darkMode: 'class', // or 'media' or 'class'
   theme: {
     extend: {
-      colors: {
-        
+      colors: {},
+      inset: {
+        18: '4.5rem',
+      },
+      padding: {
+        '1.75': '0.4375rem',
       }
     },
   },
@@ -21,5 +22,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/aspect-ratio'),
   ],
 }

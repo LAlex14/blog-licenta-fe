@@ -1,4 +1,4 @@
-// vetur.config.js
+// vetur.config.ts
 /** @type {import('vls').VeturConfig} */
 module.exports = {
   projects: [

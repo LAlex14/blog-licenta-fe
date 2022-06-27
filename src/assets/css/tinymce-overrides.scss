@@ -1,0 +1,44 @@
+.tox-button {
+  background-color: #4f45e4 !important;
+  border-radius: 0.25rem !important;
+}
+
+.tox-button--naked {
+  background-color: transparent !important;
+}
+
+.tox-button--secondary {
+  background-color: #efefef !important;
+}
+
+.tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary, .tox .tox-menubar {
+  background: #f8fafc !important;
+}
+
+.tox:not([dir=rtl]) .tox-statusbar__branding {
+  display: none;
+}
+
+.tox {
+  .tox-mbtn__select-label {
+    cursor: pointer !important;
+  }
+
+  .tox-tbtn, .tox-mbtn {
+    cursor: pointer;
+  }
+}
+
+
+.tox-tinymce--disabled .tox-editor-header {
+  visibility: hidden;
+  height: 0;
+}
+
+.tox .tox-menubar + .tox-toolbar, .tox .tox-menubar + .tox-toolbar-overlord .tox-toolbar__primary {
+  border-bottom: 1px solid #ccc;
+}
+
+.tox-edit-area__iframe {
+  background-color: #f8fafc !important;
+}

@@ -1,52 +1,56 @@
 <template>
-  <div :class="{
-         'block w-full': block,
-         'inline-flex': !block,
-         'shadow-sm': !variant.includes('link'),
-         [customClass]: customClass
-        }"
-       class="relative"
+  <div
+    :class="[customClass, {
+           'block w-full': block,
+           'shadow-sm': !variant.includes('link'),
+           }]"
   >
-    <button v-bind="$attrs"
-            :type="type"
-            :disabled="disabled || loading"
-            ref="button"
-            class="base-button items-center justify-center border border-transparent rounded-md shadow-sm font-medium focus:outline-none focus:ring-gray-600 focus:border-gray-600 transition ease-in-out duration-150"
-            :class="{
-                  'text-white bg-blue-600 hover:bg-blue-700': variant === 'primary',
-                  'text-xs px-2.5 py-1.5 leading-4': size === 'xs',
-                  'text-sm px-4 py-2 leading-4': size === 'sm',
-                  'text-sm px-5 py-2 leading-5': size === 'md',
-                  'text-base px-6 py-4 leading-6': size === 'lg',
-                  'text-base px-8 py-4 leading-6': size === 'xl',
-                  'opacity-50 cursor-not-allowed': disabled || loading,
-                  'inline-flex': !block,
-                  'w-full flex justify-center': block,
-                }"
+    <button
+      ref="button"
+      :class="{
+              'text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500': variant === 'primary',
+              'text-gray-700 bg-gray-200 hover:bg-gray-400 hover:text-white focus:ring-gray-500': variant === 'secondary',
+              'text-white bg-red-500 hover:bg-red-700 focus:ring-red-500': variant === 'danger',
+              'text-xs px-2.5 py-1.5 leading-4': size === 'xs',
+              'text-sm px-4 py-2 leading-4': size === 'sm',
+              'text-sm px-5 py-2 leading-5': size === 'md',
+              'text-base px-6 py-4 leading-6': size === 'lg',
+              'text-base px-8 py-4 leading-6': size === 'xl',
+              'opacity-80 cursor-not-allowed': disabled || loading,
+              'inline-flex': !block,
+              'w-full flex justify-center': block,
+            }"
+      :disabled="disabled || loading"
+      :type="type"
+      class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+      v-bind="$attrs"
     >
         <span v-if="loading"
               class="absolute flex w-full items-center justify-center">
-            <LoadingIcon :size="size"/>
+            <BaseLoading :size="size"/>
         </span>
 
-      <span class="flex flex-wrap items-center"
-            :class="{'opacity-0': loading}"
+      <span
+        :class="{'opacity-0': loading}"
+        class="flex flex-wrap items-center font-medium"
       >
-            <slot></slot>
+            <slot>
+                {{ label }}
+            </slot>
         </span>
     </button>
   </div>
 </template>
 <script lang="ts">
-import LoadingIcon from "@/components/common/buttons/LoadingIcon.vue";
-import { defineComponent, PropType } from "vue";
+import BaseLoading from "@/components/common/buttons/BaseLoading.vue";
+import {defineComponent, PropType} from "vue";
 
 type ButtonType = "button" | "submit" | "reset" | undefined
 
 export default defineComponent({
   inheritAttrs: false,
   components: {
-    LoadingIcon,
+    BaseLoading,
   },
   props: {
     block: {
@@ -76,7 +80,11 @@ export default defineComponent({
     customClass: {
       type: String,
       default: ''
-    }
+    },
+    label: {
+      type: String,
+      default: '',
+    },
   },
   methods: {
     focus() {
@@ -85,10 +93,3 @@ export default defineComponent({
   },
 })
 </script>
-<style lang="scss" scoped>
-.base-button {
-  &:focus {
-    @apply ring-1 ring-blue-500;
-  }
-}
-</style>

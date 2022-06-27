@@ -1,17 +1,19 @@
 <template>
   <div
-    class="my-6"
     :class="[{
       'has-error': errorMessage,
+      'flex items-center leading-3': $attrs.type === 'checkbox'
     }, otherClasses]"
+    class="my-3 w-full"
   >
-    <label v-if="label || $slots.label"
-           :for="String($attrs.id)"
-           class="block text-sm font-medium text-gray-700"
+    <label
+      v-if="(label || $slots.label) && $attrs.type !== 'checkbox'"
+      :for="String($attrs.id)"
+      class="block text-sm font-medium text-gray-700"
     >
       <slot name="label">
         {{ label }}
-        <span v-if="required" class="text-gray-500">
+        <span v-if="isRequiredField" class="text-gray-500">
           *
         </span>
       </slot>
@@ -20,23 +22,38 @@
     <div class="relative rounded-md">
       <FormItemError
         :error="errorMessage"
+        :rules="rules"
         :show-tooltip="inlineErrors"
       >
         <slot
-          :handleChange="handleChange"
-          :handleBlur="handleBlur"
-          :inputValue="inputValue"
           :errorMessage="errorMessage"
+          :handleBlur="handleBlur"
+          :handleChange="handleChange"
+          :inputValue="inputValue"
         />
 
       </FormItemError>
     </div>
+
+    <label
+      v-if="(label || $slots.label) && $attrs.type === 'checkbox'"
+      :for="String($attrs.id)"
+      class="ml-2 block text-sm font-medium text-gray-900 hover:cursor-pointer"
+      @click="$emit('click-checkbox')"
+    >
+      <slot name="label">
+        {{ label }}
+        <span v-if="isRequiredField" class="text-gray-500">
+          *
+        </span>
+      </slot>
+    </label>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, provide } from "vue";
-import { useField } from "vee-validate";
-import { XCircleIcon, InfoIcon } from '@zhuowenli/vue-feather-icons'
+import {defineComponent, provide} from "vue";
+import {useField} from "vee-validate";
+import {InfoIcon, XCircleIcon} from '@zhuowenli/vue-feather-icons'
 import FormItemError from "@/components/form/FormItemError.vue";
 
 export default defineComponent({
@@ -56,7 +73,7 @@ export default defineComponent({
       default: '',
     },
     modelValue: {
-      type: [String, Number],
+      type: [String, Number, Boolean],
       default: '',
     },
     label: {
@@ -134,7 +151,12 @@ export default defineComponent({
         return this.$attrs.class
       }
       return ''
-    }
+    },
+    isRequiredField() {
+      const hasRequiredAttr = this.$attrs?.required || false;
+      const hasRequiredRule = typeof this.rules === 'object' ? this.rules?.required : this.rules?.includes('required');
+      return hasRequiredRule || hasRequiredAttr;
+    },
   },
   watch: {
     modelValue(val, oldVal) {
