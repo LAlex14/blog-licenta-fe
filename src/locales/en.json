@@ -1,5 +1,6 @@
 {
   "Welcome Message": "Welcome Message Translation",
   "locales": "ro",
-  "minutes_read": "minute to read | {n} to minutes read"
+  "minutes_read": "minute to read | to minutes read",
+  "articles": "articles | article | articles"
 }

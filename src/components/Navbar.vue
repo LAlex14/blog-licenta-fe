@@ -258,7 +258,7 @@ export default {
         (this.$route.name === 'ViewAuthor' && String(this.$route.params.id) === String(this.$user.id))
     },
     editButtonLabel() {
-      return this.$route.name === 'ViewBlog' ? 'Edit Blog' : 'Edit Profile'
+      return this.$route.name === 'ViewBlog' ? 'Edit article' : 'Edit profile'
     }
   },
   methods: {

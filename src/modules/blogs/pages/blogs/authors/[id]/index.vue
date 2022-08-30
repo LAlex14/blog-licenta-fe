@@ -49,7 +49,12 @@
               <dl class="mt-10 text-center flex justify-around items-end">
                 <div class="flex flex-col">
                   <dd class="text-gray-50 text-3xl font-extrabold text-gray-50">{{ author.blogs_count || 0 }}+</dd>
-                  <dt class="font-medium text-indigo-200">{{ $t('Blogs') }}</dt>
+                  <dt class="font-medium text-indigo-200">{{
+                      $t('articles', {
+                        n: author.blogs_count
+                      })
+                    }}
+                  </dt>
                 </div>
                 <div class="flex flex-col mt-10 sm:mt-0">
                   <dd class="text-gray-50 text-3xl font-extrabold text-gray-50">{{ author.views_count || 0 }}+</dd>
@@ -97,9 +102,6 @@ export default {
       return this.$store.state.blogs.blogs.filter(blog => blog.creator.id === this.id)
     },
     author() {
-      if (String(this.id) === String(this.$user.id)) {
-        return this.$user
-      }
       return this.$store.state.blogs.authors.find(author => author.id === this.id)
     }
   }
