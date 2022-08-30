@@ -209,11 +209,11 @@ export default {
     },
     async updateProfile() {
       try {
-        await this.$store.dispatch('auth/updateProfile', this.form)
+        await this.$store.dispatch('auth/setAuthor', this.form)
         this.$success(this.$t('Profile updated successfully'));
         await this.$router.push(`/blogs/authors/${this.$user.id}`);
       } catch (e) {
-        this.$error(this.$t('Something went wrong'));
+        this.$error(this.$t('Something went wrong. Please try again later'));
       }
     }
   },

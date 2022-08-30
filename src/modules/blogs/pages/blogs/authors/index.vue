@@ -35,7 +35,11 @@
 
         <div class="flex flex-wrap gap-3 justify-between items-content">
           <div class="flex space-x-1 text-sm text-gray-500">
-            <span> {{ author.blogs_count + ' ' + $t('blogs') }} </span>
+            <span> {{
+                author.blogs_count + ' ' + $t('articles', {
+                  n: author.blogs_count
+                })
+              }} </span>
             <span> &middot; {{ author.views_count + ' ' + $t('views') }} </span>
             <span> &middot; {{ author.readings_count + ' ' + $t('readings') }} </span>
             <span> &middot; {{ author.likes_count + ' ' + $t('likes') }} </span>

@@ -135,7 +135,7 @@ export default {
         return ''
       }
       let date = new Date(this.blog.created_at);
-      return date.toLocaleDateString(this.$t('locales'), dateOptions);
+      return date.toLocaleDateString('en', dateOptions);
     },
     blog() {
       return this.$store.getters['blogs/blogBySlug'](this.slug);
@@ -159,7 +159,6 @@ export default {
     },
     addReading() {
       setTimeout(() => {
-        console.log('lala')
         this.$store.dispatch('blogs/addReadingOnBlog', this.blog.id)
       }, this.readingTime * 60 * 1000);
     }

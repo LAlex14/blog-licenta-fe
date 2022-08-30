@@ -39,7 +39,7 @@ export default {
     localStorage.clear();
     delete axios.defaults.headers.common['Authorization'];
     await store.dispatch('blogs/getPublicBlogs');
-    await router.push('/blogs');
+    await router.push('/auth');
   },
 
   async changePassword(data) {

@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
-import { DefineComponent } from 'vue'
-import { NotificationStoreType } from "@/components/common/NotificationPlugin";
+import {DefineComponent} from 'vue'
+import {NotificationStoreType} from "@/components/common/NotificationPlugin";
 
 declare module '@vue/runtime-core' {
   export interface ComponentCustomProperties {
@@ -16,7 +16,7 @@ declare module '@vue/runtime-core' {
 
     $warning(notification: Notification | string): void,
 
-    $notify(notification: Notification | string): void,
+    $notify(notification: { showClose: boolean; icon: string; message: string; timeout: number }): void,
 
     $copyToClipboard(value: string, message?: string): void,
 

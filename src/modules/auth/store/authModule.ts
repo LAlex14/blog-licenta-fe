@@ -1,7 +1,7 @@
 import AuthService from "@/modules/auth/services/AuthService.js";
 import {error} from '@/components/common/NotificationPlugin';
 import {ActionTree, GetterTree, Module, MutationTree} from "vuex";
-import {RootState} from "@/store";
+import store, {RootState} from "@/store";
 import router from "@/router/router";
 
 export type State = {
@@ -21,6 +21,10 @@ const mutations: MutationTree<State> = {
   setUser(state: State, value: object) {
     state.user = value;
   },
+  setAuthor(state: State, value: any) {
+    const authorIndex = store.state.blogs.authors.findIndex((item) => item.id === value.id);
+    store.state.blogs.authors[authorIndex] = value;
+  }
 };
 
 const actions: ActionTree<State, RootState> = {

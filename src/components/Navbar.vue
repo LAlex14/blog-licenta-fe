@@ -8,7 +8,7 @@
             to="/blogs"
           >
             <img alt="Workflow" class="h-8 w-auto"
-                 src="https://tailwindui.com/img/logos/workflow-logo-indigo-600-mark-gray-800-text.svg"/>
+                 src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg">
           </router-link>
           <div class="hidden md:ml-6 md:flex md:space-x-8">
             <div
@@ -258,7 +258,7 @@ export default {
         (this.$route.name === 'ViewAuthor' && String(this.$route.params.id) === String(this.$user.id))
     },
     editButtonLabel() {
-      return this.$route.name === 'ViewBlog' ? 'Edit Blog' : 'Edit Profile'
+      return this.$route.name === 'ViewBlog' ? 'Edit article' : 'Edit profile'
     }
   },
   methods: {

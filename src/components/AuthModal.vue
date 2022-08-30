@@ -33,7 +33,7 @@
                   </div>
                   <ul class="mt-6 space-y-4" role="list">
                     <li v-for="reason in reasons" :key="reason" class="flex">
-                      <CheckIcon aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-green-500"/>
+                      <CheckIcon class="flex-shrink-0 w-6 h-6 text-green-500"/>
                       <span class="ml-3 text-gray-500">{{ reason }}</span>
                     </li>
                   </ul>

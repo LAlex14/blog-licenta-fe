@@ -22,7 +22,7 @@
       v-if="loading"
       size="lg"
     />
-    <div class="grid grid-cols-3 gap-1.5">
+    <div class="grid grid-cols-3 gap-1">
       <img
         v-for="img in images"
         :key="img"

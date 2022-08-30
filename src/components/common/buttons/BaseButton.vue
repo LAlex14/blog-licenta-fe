@@ -2,7 +2,7 @@
   <div
     :class="[customClass, {
            'block w-full': block,
-           'shadow-sm': !variant.includes('link'),
+           '': !variant.includes('link'),
            }]"
   >
     <button
@@ -14,15 +14,15 @@
               'text-xs px-2.5 py-1.5 leading-4': size === 'xs',
               'text-sm px-4 py-2 leading-4': size === 'sm',
               'text-sm px-5 py-2 leading-5': size === 'md',
-              'text-base px-6 py-4 leading-6': size === 'lg',
+              'text-base px-6 py-3 leading-6': size === 'lg',
               'text-base px-8 py-4 leading-6': size === 'xl',
-              'opacity-80 cursor-not-allowed': disabled || loading,
+              'opacity-80 cursor-not-allowed relative': disabled || loading,
               'inline-flex': !block,
               'w-full flex justify-center': block,
             }"
       :disabled="disabled || loading"
       :type="type"
-      class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+      class="shadow w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
       v-bind="$attrs"
     >
         <span v-if="loading"
