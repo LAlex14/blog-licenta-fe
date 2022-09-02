@@ -76,8 +76,8 @@
                 class="bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <span class="sr-only">{{ $t('Open user menu') }}</span>
                 <img
-                  v-if="$user.avatar"
-                  :src="$user.avatar"
+                  v-if="$user?.avatar"
+                  :src="$user?.avatar"
                   alt=""
                   class="h-8 w-8 rounded-full"
                 />

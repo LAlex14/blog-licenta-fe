@@ -3,6 +3,7 @@ import copyToClipboard from "@/plugins/copyToClipboard";
 import NotificationsPlugin from "@/components/common/NotificationPlugin";
 import dateFormatPlugin from "@/plugins/dateFormatPlugin";
 import veeValidate from "@/plugins/veeValidate";
+import store from "@/store";
 
 export default {
   install(Vue: App) {
@@ -13,7 +14,8 @@ export default {
     Vue.mixin({
       computed: {
         $user() {
-          return this.$store.state.auth?.user || {}
+          const userId = this.$store.state.auth?.user?.id;
+          return store.state.blogs.authors.find((item) => String(item.id) === String(userId));
         },
       }
     })

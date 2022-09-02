@@ -40,9 +40,9 @@ const actions: ActionTree<State, RootState> = {
       throw err
     }
   },
-  setAuthor({state}, value) {
-    const authorIndex = store.state.blogs.authors.findIndex((item) => String(item.id) === String(state.user.id));
-    store.state.blogs.authors[authorIndex] = {...store.state.blogs.authors[authorIndex], ...value};
+  async setAuthor({state}, value) {
+    await AuthService.updateProfile(value);
+    await store.dispatch('blogs/getAuthors');
   },
   async register({commit}, data) {
     try {
