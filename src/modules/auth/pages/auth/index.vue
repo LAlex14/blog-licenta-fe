@@ -78,9 +78,12 @@ export default defineComponent({
       if (!this.$route.query.token) {
         return;
       }
+      const datas = this.$route.query.token.split(',email=');
       const data = {
-        token: this.$route.query.token
+        token: datas[0],
+        email: datas[1],
       }
+      console.log(data)
       try {
         await this.login(data);
         this.$success(this.$t('Your account has been activated successfully'))
