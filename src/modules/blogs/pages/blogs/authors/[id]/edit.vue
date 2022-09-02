@@ -209,6 +209,7 @@ export default {
     },
     async updateProfile() {
       try {
+        console.log(this.form);
         await this.$store.dispatch('auth/setAuthor', this.form)
         this.$success(this.$t('Profile updated successfully'));
         await this.$router.push(`/blogs/authors/${this.$user.id}`);

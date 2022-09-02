@@ -21,8 +21,8 @@ const mutations: MutationTree<State> = {
   setUser(state: State, value: object) {
     state.user = value;
   },
-  setAuthor(state: State, value: any) {
-    const authorIndex = store.state.blogs.authors.findIndex((item) => item.id === value.id);
+  setAuthor(state: State, value: object) {
+    const authorIndex = store.state.blogs.authors.findIndex((item) => String(item.id) === String(value.id));
     store.state.blogs.authors[authorIndex] = value;
   }
 };
@@ -39,6 +39,10 @@ const actions: ActionTree<State, RootState> = {
     } catch (err) {
       throw err
     }
+  },
+  setAuthor({state}, value) {
+    const authorIndex = store.state.blogs.authors.findIndex((item) => String(item.id) === String(state.user.id));
+    store.state.blogs.authors[authorIndex] = {...store.state.blogs.authors[authorIndex], ...value};
   },
   async register({commit}, data) {
     try {
